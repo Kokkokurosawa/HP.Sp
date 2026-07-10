@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+/*
+ * デザイントークン
+ * 白・ベビーブルー・深い青・控えめな紫・夜空の濃色を基本色とする。
+ */
+@theme {
+  --color-babyblue-50: #f2f9fd;
+  --color-babyblue-100: #e3f2fb;
+  --color-babyblue-200: #c9e6f6;
+  --color-babyblue-300: #a5d5ef;
+  --color-babyblue-400: #7fc3e8;
+
+  --color-deepblue-500: #33549c;
+  --color-deepblue-600: #27427e;
+  --color-deepblue-700: #1e3364;
+
+  --color-lilac-200: #ddd5f0;
+  --color-lilac-400: #a794d6;
+  --color-lilac-600: #715ea3;
+
+  --color-night-800: #131c45;
+  --color-night-900: #0c1233;
+
+  --font-sans: "Hiragino Maru Gothic ProN", "Hiragino Kaku Gothic ProN",
+    "BIZ UDPGothic", "Yu Gothic Medium", "Yu Gothic", "Noto Sans JP",
+    system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
