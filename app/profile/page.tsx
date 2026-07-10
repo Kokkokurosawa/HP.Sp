@@ -17,13 +17,14 @@ export default function ProfilePage() {
       </h1>
 
       <div className="mt-10 flex flex-col gap-10 md:flex-row md:items-start">
-        {/* キャラクター画像(未確定の間はプレースホルダー) */}
-        {siteConfig.images.characterProfile ? (
+        {/* キャラクター画像(未確定の間はプレースホルダー)。差し替え手順は docs/character-image-guidelines.md */}
+        {siteConfig.images.profile.src ? (
           <Image
-            src={siteConfig.images.characterProfile}
-            alt={siteConfig.characterName}
-            width={280}
-            height={280}
+            src={siteConfig.images.profile.src}
+            alt={siteConfig.images.profile.alt || siteConfig.characterName}
+            width={560}
+            height={560}
+            sizes="224px"
             className="mx-auto size-56 shrink-0 object-contain md:mx-0"
           />
         ) : (

@@ -75,18 +75,22 @@ pnpm exec tsc --noEmit  # 型チェック
 
 ## 画像の差し替え方法
 
-1. 画像を `public/images/` に置く(例: `public/images/supitaro-main.png`)
-2. `config/site.ts` の `images` にパスを設定する
+受け入れ仕様(推奨形式・サイズ・透過余白)と手順の詳細は
+[docs/character-image-guidelines.md](docs/character-image-guidelines.md) を参照。概要:
+
+1. 画像を `public/images/supitaro/` に置く(例: `supitaro-main.webp`)
+2. `config/site.ts` の `images` に用途別の `src` / `alt` を設定する
 
 ```ts
 images: {
-  characterMain: "/images/supitaro-main.png",     // トップのメインビジュアル
-  characterProfile: "/images/supitaro-profile.png", // プロフィールページ
-  ogImage: "/images/og.png",                       // OG 画像(未配線・下記参照)
+  hero: { src: "/images/supitaro/supitaro-main.webp", alt: "すぴたろう" },
+  profile: { src: "/images/supitaro/supitaro-profile.webp", alt: "すぴたろう" },
+  og: { src: "", alt: "" }, // OG は別途 1200×630 画像が必要(未配線・下記参照)
 },
 ```
 
-パスが空文字の間は、明確なプレースホルダー(「画像準備中」)が表示されます。
+`src` が空文字の間は、明確なプレースホルダー(「画像準備中」)が表示されます。
+favicon は `app/icon.svg` の差し替えで管理します。
 
 ## URL の設定方法
 

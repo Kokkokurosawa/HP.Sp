@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.siteName,
     locale: "ja_JP",
     type: "website",
-    // TODO: OG 画像確定後に images を設定する(siteConfig.images.ogImage)
+    // TODO: OG 画像確定後に images を設定する(siteConfig.images.og。ヒーローとは別に専用画像が必要)
   },
   twitter: {
     card: "summary",

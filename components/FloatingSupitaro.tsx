@@ -22,13 +22,14 @@ export default function FloatingSupitaro() {
       }
       className="shrink-0"
     >
-      {siteConfig.images.characterMain ? (
+      {siteConfig.images.hero.src ? (
         <Image
-          src={siteConfig.images.characterMain}
-          alt={siteConfig.characterName}
-          width={280}
-          height={280}
+          src={siteConfig.images.hero.src}
+          alt={siteConfig.images.hero.alt || siteConfig.characterName}
+          width={560}
+          height={560}
           priority
+          sizes="(min-width: 640px) 280px, 224px"
           className="size-56 object-contain sm:size-70"
         />
       ) : (
