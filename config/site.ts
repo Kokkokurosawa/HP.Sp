@@ -55,12 +55,26 @@ export const siteConfig = {
    */
   images: {
     /** トップページのヒーロー(メインビジュアル)。実画像設定時は priority 読み込み */
-    hero: { src: "", alt: "" },
+    hero: {
+      // TODO: 正式キービジュアル確定後に差し替える(現在は開発用仮イラスト)
+      src: "/images/supitaro/supitaro-temporary-main.svg",
+      alt: "白い体と青い目を持つ、開発用のすぴたろう仮イラスト",
+    },
     /** プロフィールページのキャラクター画像(通常の遅延読み込み) */
-    profile: { src: "", alt: "" },
+    profile: {
+      // TODO: 正式キービジュアル確定後に差し替える(現在は開発用仮イラスト)
+      src: "/images/supitaro/supitaro-temporary-main.svg",
+      alt: "すぴたろうの全身が分かる、開発用の仮イラスト",
+    },
     /** Open Graph 画像(SNS シェア用)。ヒーローとは別に専用画像が必要 */
     og: { src: "", alt: "" },
   } satisfies Record<string, SiteImage>,
+
+  /**
+   * 仮画像(開発用イメージ)運用中の注記。キャラクター画像の近くに小さく表示される。
+   * 正式画像への差し替え時に空文字にすると、すべての表示箇所から消える。
+   */
+  temporaryArtworkNotice: "現在は開発用イメージです",
 
   /** グローバルナビゲーション */
   nav: [
