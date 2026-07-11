@@ -42,13 +42,11 @@ export const siteConfig = {
    * 外部チャンネル URL(正式・確認済み)。ここが唯一の定義元。
    * 変更時はこの行を更新する。トラッキングパラメータは付けない。
    * 空文字のチャンネルは公開画面に表示されない(要素自体を DOM に出さない)。
-   * twitch: 正式 URL 未提供のため空文字のまま。確定したらここに設定する
-   *         (推測 URL は設定しない)。設定すれば追加実装なしでフッターに表示される。
    */
   channels: {
     youtube: "https://www.youtube.com/@supitaro_oo",
     x: "https://x.com/supitaro_oo",
-    twitch: "",
+    twitch: "https://www.twitch.tv/supitaro_oo",
   },
 
   /**

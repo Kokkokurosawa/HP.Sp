@@ -97,8 +97,7 @@ favicon は `app/icon.svg` の差し替えで管理します。
 `config/site.ts` が唯一の定義元です(ページやコンポーネントへ直書きしない)。
 
 - `siteUrl` — 本番ドメイン。未確定のため空文字(設定すると `app/layout.tsx` の canonical / OG URL が解決されます)
-- `channels.youtube` / `channels.x` — **正式 URL 設定済み**(すぴたろう公式の YouTube チャンネルと X アカウント)。URL 変更時は `config/site.ts` のこの 2 行だけを更新します。トラッキングパラメータは付けません。空文字に戻すと「準備中」表示に戻ります(未設定分岐は保守用に維持)
-- `channels.twitch` — 正式 URL 未確定のため**空文字**。確定したら `config/site.ts` に設定します(**推測 URL は設定しない**)。空文字の間はフッターに表示されず、設定すれば追加実装なしで並びます
+- `channels.youtube` / `channels.x` / `channels.twitch` — **正式 URL 設定済み**(すぴたろう公式の YouTube / X / Twitch)。URL 変更時は `config/site.ts` のこの行だけを更新します。トラッキングパラメータは付けません。空文字にしたチャンネルはフッターの FOLLOW から自動的に非表示になります(要素自体を DOM に出さない)
 
 ## 今回実装した範囲
 
