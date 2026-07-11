@@ -33,8 +33,8 @@ export default function Hero() {
           <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
             {siteConfig.channels.youtube ? (
               <>
-                {/* YouTube が第一 CTA(配信視聴がファン化の中心導線) */}
-                <Button href={siteConfig.channels.youtube} external>
+                {/* YouTube が第一 CTA(配信視聴がファン化の中心導線)。赤の専用 variant で識別性を上げる */}
+                <Button href={siteConfig.channels.youtube} external variant="youtube">
                   YouTubeで配信を見る
                 </Button>
                 <Button href="/profile" variant="secondary">

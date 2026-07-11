@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 
+// URL が空のチャンネルは除外する(空リンク・準備中表記を公開画面へ出さない)。
+// twitch は現状空文字なので表示されない。正式 URL を config へ設定すれば自動で並ぶ。
 const footerChannels = [
   { label: "YouTube", href: siteConfig.channels.youtube },
   { label: "X", href: siteConfig.channels.x },
-];
+  { label: "Twitch", href: siteConfig.channels.twitch },
+].filter((channel) => channel.href);
 
 export default function Footer() {
   return (
@@ -34,31 +37,22 @@ export default function Footer() {
         </nav>
 
         <ul className="flex flex-wrap gap-x-6 gap-y-2">
-          {footerChannels.map((channel) =>
-            channel.href ? (
-              <li key={channel.label}>
-                <a
-                  href={channel.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex min-h-11 items-center gap-1 text-sm text-babyblue-100 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-babyblue-300"
-                >
-                  {channel.label}
-                  <span aria-hidden="true">↗</span>
-                  <span className="sr-only">
-                    (外部リンク・新しいタブで開きます)
-                  </span>
-                </a>
-              </li>
-            ) : (
-              <li
-                key={channel.label}
-                className="inline-flex min-h-11 items-center text-sm text-babyblue-100/60"
+          {footerChannels.map((channel) => (
+            <li key={channel.label}>
+              <a
+                href={channel.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center gap-1 text-sm text-babyblue-100 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-babyblue-300"
               >
-                {channel.label}(準備中)
-              </li>
-            ),
-          )}
+                {channel.label}
+                <span aria-hidden="true">↗</span>
+                <span className="sr-only">
+                  (外部リンク・新しいタブで開きます)
+                </span>
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
       <p className="border-t border-babyblue-100/10 px-4 py-4 text-center text-xs text-babyblue-100/60">

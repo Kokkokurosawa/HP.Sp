@@ -4,7 +4,8 @@ import type { ReactNode } from "react";
 type ButtonProps = {
   href: string;
   children: ReactNode;
-  variant?: "primary" | "secondary";
+  /** youtube は YouTube 導線専用の赤 variant。通常の主ボタンは primary(deepblue)のまま。 */
+  variant?: "primary" | "secondary" | "youtube";
   /** 外部リンクの場合は true(新しいタブで開き、外部リンクであることを明示する) */
   external?: boolean;
 };
@@ -18,6 +19,8 @@ const variantClass = {
   primary: "bg-deepblue-600 text-white hover:bg-deepblue-500",
   secondary:
     "border border-deepblue-600/40 bg-white text-deepblue-600 hover:bg-babyblue-50",
+  youtube:
+    "bg-youtube-500 text-white hover:bg-youtube-600 active:bg-youtube-700",
 } as const;
 
 export default function Button({

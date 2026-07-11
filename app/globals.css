@@ -22,6 +22,12 @@
   --color-night-800: #131c45;
   --color-night-900: #0c1233;
 
+  /* YouTube 主 CTA 専用色。サイトの primary(deepblue)とは分離し、YouTube 導線だけで使う。
+     純 YouTube 赤(#FF0000)は世界観に強すぎるため、落ち着いた赤に寄せている。 */
+  --color-youtube-500: #c4302b;
+  --color-youtube-600: #a82824;
+  --color-youtube-700: #8f211e;
+
   --font-sans: "Hiragino Maru Gothic ProN", "Hiragino Kaku Gothic ProN",
     "BIZ UDPGothic", "Yu Gothic Medium", "Yu Gothic", "Noto Sans JP",
     system-ui, sans-serif;

@@ -40,7 +40,7 @@ export default function ChannelLinks() {
                   rel="noopener noreferrer"
                   className={
                     channel.primary
-                      ? "flex min-h-11 flex-col gap-1 rounded-2xl bg-deepblue-600 p-5 transition-colors hover:bg-deepblue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepblue-500"
+                      ? "flex min-h-11 flex-col gap-1 rounded-2xl bg-youtube-500 p-5 transition-colors hover:bg-youtube-600 active:bg-youtube-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepblue-500"
                       : "flex min-h-11 flex-col gap-1 rounded-2xl border border-babyblue-200 bg-white p-5 transition-colors hover:border-babyblue-400 hover:bg-babyblue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepblue-500"
                   }
                 >
@@ -60,7 +60,7 @@ export default function ChannelLinks() {
                   <span
                     className={
                       channel.primary
-                        ? "text-sm text-babyblue-100"
+                        ? "text-sm text-white/90"
                         : "text-sm text-night-800/70"
                     }
                   >
