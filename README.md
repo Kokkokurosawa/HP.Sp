@@ -94,10 +94,10 @@ favicon は `app/icon.svg` の差し替えで管理します。
 
 ## URL の設定方法
 
-`config/site.ts` で管理しています。未確定の URL は空文字にしてあり、**架空の URL は設定していません**。
+`config/site.ts` が唯一の定義元です(ページやコンポーネントへ直書きしない)。
 
-- `siteUrl` — 本番ドメイン。設定すると `app/layout.tsx` の canonical / OG URL が解決されます
-- `channels.youtube` / `channels.x` — 設定すると「準備中」表示が外部リンクに切り替わります
+- `siteUrl` — 本番ドメイン。未確定のため空文字(設定すると `app/layout.tsx` の canonical / OG URL が解決されます)
+- `channels.youtube` / `channels.x` — **正式 URL 設定済み**(すぴたろう公式の YouTube チャンネルと X アカウント)。URL 変更時は `config/site.ts` のこの 2 行だけを更新します。トラッキングパラメータは付けません。空文字に戻すと「準備中」表示に戻ります(未設定分岐は保守用に維持)
 
 ## 今回実装した範囲
 

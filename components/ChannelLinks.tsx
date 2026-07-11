@@ -1,16 +1,24 @@
 import SectionHeading from "@/components/SectionHeading";
 import { siteConfig } from "@/config/site";
 
+/**
+ * YouTube を第一 CTA、X を第二 CTA として扱う(順序・塗り・文言で区別し、色だけに依存しない)。
+ * URL が空文字の間は「準備中」表示(保守用の未設定分岐)。
+ */
 const channels = [
   {
     label: "YouTube",
+    cta: "YouTubeで配信を見る",
     description: "こっそりゲーム配信をしているチャンネル",
     href: siteConfig.channels.youtube,
+    primary: true,
   },
   {
     label: "X",
+    cta: "Xで活動を追う",
     description: "公式アカウント",
     href: siteConfig.channels.x,
+    primary: false,
   },
 ];
 
@@ -30,16 +38,32 @@ export default function ChannelLinks() {
                   href={channel.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex min-h-11 flex-col gap-1 rounded-2xl border border-babyblue-200 bg-white p-5 transition-colors hover:border-babyblue-400 hover:bg-babyblue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepblue-500"
+                  className={
+                    channel.primary
+                      ? "flex min-h-11 flex-col gap-1 rounded-2xl bg-deepblue-600 p-5 transition-colors hover:bg-deepblue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepblue-500"
+                      : "flex min-h-11 flex-col gap-1 rounded-2xl border border-babyblue-200 bg-white p-5 transition-colors hover:border-babyblue-400 hover:bg-babyblue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepblue-500"
+                  }
                 >
-                  <span className="flex items-center gap-2 font-bold text-deepblue-700">
-                    {channel.label}
+                  <span
+                    className={
+                      channel.primary
+                        ? "flex items-center gap-2 font-bold text-white"
+                        : "flex items-center gap-2 font-bold text-deepblue-700"
+                    }
+                  >
+                    {channel.cta}
                     <span aria-hidden="true">↗</span>
                     <span className="sr-only">
                       (外部リンク・新しいタブで開きます)
                     </span>
                   </span>
-                  <span className="text-sm text-night-800/70">
+                  <span
+                    className={
+                      channel.primary
+                        ? "text-sm text-babyblue-100"
+                        : "text-sm text-night-800/70"
+                    }
+                  >
                     {channel.description}
                   </span>
                 </a>

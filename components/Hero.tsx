@@ -31,10 +31,25 @@ export default function Hero() {
             {siteConfig.characterName}のこと、すこしだけ、のぞいてみませんか。
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
-            <Button href="/profile">プロフィールを見る</Button>
-            <Button href="/news" variant="secondary">
-              お知らせ
-            </Button>
+            {siteConfig.channels.youtube ? (
+              <>
+                {/* YouTube が第一 CTA(配信視聴がファン化の中心導線) */}
+                <Button href={siteConfig.channels.youtube} external>
+                  YouTubeで配信を見る
+                </Button>
+                <Button href="/profile" variant="secondary">
+                  プロフィールを見る
+                </Button>
+              </>
+            ) : (
+              // URL 未設定時の保守用フォールバック
+              <>
+                <Button href="/profile">プロフィールを見る</Button>
+                <Button href="/news" variant="secondary">
+                  お知らせ
+                </Button>
+              </>
+            )}
           </div>
         </div>
 

@@ -39,13 +39,13 @@ export const siteConfig = {
   siteUrl: "",
 
   /**
-   * 外部チャンネル URL。
-   * TODO: 各チャンネルの URL 確定後に設定する。未確定のため空文字。
-   * 空文字の間、リンクは「準備中」表示になる(架空 URL は設定しない)。
+   * 外部チャンネル URL(正式・確認済み)。ここが唯一の定義元。
+   * 変更時はこの 2 行だけを更新する。トラッキングパラメータは付けない。
+   * 空文字に戻すと「準備中」表示になる(未設定分岐は保守用に維持)。
    */
   channels: {
-    youtube: "",
-    x: "",
+    youtube: "https://www.youtube.com/@supitaro_oo",
+    x: "https://x.com/supitaro_oo",
   },
 
   /**
