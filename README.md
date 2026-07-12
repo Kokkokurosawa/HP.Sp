@@ -20,6 +20,7 @@
 |---|---|
 | `/` | トップ(ヒーロー・キャラクター紹介・チャンネル導線・最新お知らせ 3 件) |
 | `/profile` | プロフィール(基本情報・独自の言葉・将来追加予定の設定) |
+| `/gallery` | ギャラリー(現在は画像 0 件の空状態。追加手順は下記) |
 | `/news` | お知らせ一覧 |
 
 ### ディレクトリ
@@ -91,6 +92,13 @@ images: {
 
 `src` が空文字の間は、明確なプレースホルダー(「画像準備中」)が表示されます。
 favicon は `app/icon.svg` の差し替えで管理します。
+
+### ギャラリー画像を追加する
+
+ギャラリーのデータは `content/gallery.ts`、公開画像は `public/images/supitaro/gallery/` に配置します。
+**Obsidian の Approved 素材だけを明示的にコピー**して掲載し(Obsidian / OneDrive を直接参照しない)、
+開発用の仮画像はギャラリーに使いません。追加後は alt・画像サイズ・権利・モバイル表示を確認します。
+詳細は [docs/gallery-content-guidelines.md](docs/gallery-content-guidelines.md) を参照。
 
 ## URL の設定方法
 

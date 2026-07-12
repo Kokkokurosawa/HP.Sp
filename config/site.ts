@@ -77,10 +77,11 @@ export const siteConfig = {
    */
   temporaryArtworkNotice: "現在は開発用イメージです",
 
-  /** グローバルナビゲーション */
+  /** グローバルナビゲーション(ここが唯一の定義元。Header / MobileMenu / Footer が参照する) */
   nav: [
     { label: "ホーム", href: "/" },
     { label: "プロフィール", href: "/profile" },
+    { label: "ギャラリー", href: "/gallery" },
     { label: "お知らせ", href: "/news" },
   ] as NavItem[],
 };
