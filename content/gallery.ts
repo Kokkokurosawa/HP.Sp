@@ -26,12 +26,25 @@ export type GalleryItem = {
 };
 
 /**
- * 公開ギャラリー画像。現在は Approved な正式画像が 0 件のため空配列。
+ * 公開ギャラリー画像。Approved な正式画像だけを登録する。
  * - ダミー・仮画像・外部 URL 画像は入れない。
  * - 追加手順は docs/gallery-content-guidelines.md を参照。
  * - 公開されるのは isPublished === true の項目だけ(getPublishedGalleryItems)。
  */
-export const galleryItems: GalleryItem[] = [];
+export const galleryItems: GalleryItem[] = [
+  {
+    // ファイル名の語幹と一致させた安定 ID。画像はユーザーがコミットした正式素材。
+    id: "supitaro-design-art-v1",
+    characterSlug: "supitaro",
+    image: {
+      src: "/images/supitaro/supitaro-design-art-v1.png",
+      alt: "星や惑星に囲まれて立つ、すぴたろうのデザインアート。白い体に青い目、額の青いひし形、青い耳と尻尾。",
+    },
+    title: { ja: "すぴたろう デザインアート" },
+    publishedAt: "2026-07-13",
+    isPublished: true,
+  },
+];
 
 /** 公開対象(isPublished === true)だけを返す。 */
 export function getPublishedGalleryItems(): GalleryItem[] {
