@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import SectionHeading from "@/components/SectionHeading";
+import ProfileTraitGrid from "@/components/profile/ProfileTraitGrid";
 import { profile } from "@/content/profile";
 import { siteConfig } from "@/config/site";
 
@@ -60,19 +61,21 @@ export default function ProfilePage() {
                 <p key={line}>{line}</p>
               ))}
             </div>
-            <dl className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
-              {profile.fields.map((field) => (
-                <div
-                  key={field.label}
-                  className="rounded-2xl border border-babyblue-200 bg-white p-4"
-                >
-                  <dt className="text-xs font-bold text-deepblue-600">
-                    {field.label}
-                  </dt>
-                  <dd className="mt-1 text-night-900">{field.value}</dd>
-                </div>
-              ))}
-            </dl>
+          </section>
+
+          <section aria-labelledby="profile-traits-heading">
+            <SectionHeading id="profile-traits-heading">
+              すぴたろうのこと
+            </SectionHeading>
+            <p className="mt-4 text-sm leading-relaxed text-night-800/70">
+              気になる項目をえらぶと、すぴたろうのことをすこしずつ知れます。
+            </p>
+            {/* JavaScript 無効時のみ、各カードの詳細全文を表示し、押せない「くわしく見る」を隠す。
+                JS 有効時は詳細をシートで表示するため、二重に読み上げられない。 */}
+            <noscript>
+              <style>{`.js-trait-detail{display:block !important}.js-trait-hint{display:none !important}`}</style>
+            </noscript>
+            <ProfileTraitGrid traits={profile.traits} />
           </section>
 
           <section aria-labelledby="profile-words-heading">
