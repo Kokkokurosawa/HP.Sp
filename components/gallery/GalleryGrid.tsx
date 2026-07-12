@@ -1,47 +1,52 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import type { GalleryItem } from "@/content/gallery";
+import GalleryCard from "./GalleryCard";
+import GalleryLightbox from "./GalleryLightbox";
 
 /**
- * ギャラリーのグリッド表示。
- * - 360/390px は 1 列、十分な幅(sm 以上)で 2 列、lg 以上で 3 列。
- * - アスペクト比が混在しても切らない(object-contain + 白背景の枠)。
- * - 画像は遅延読み込み(priority なし)。alt は必須。
- * - 現時点ではカードはクリック不可。ボタン風の見た目にはしない。
+ * ギャラリーのグリッド + ライトボックスの開閉制御。
+ * - 360/390px は 1 列、sm 以上で 2 列、lg 以上で 3 列。
+ * - カードを押すと画像を大きく表示するライトボックス(GalleryLightbox)を開く。
+ * - インタラクションに必要な最小範囲だけを Client Component にする(ページは Server Component のまま)。
+ * - 画像・タイトルはカードに常時表示され、No-JS でも通常の静的ギャラリーとして読める。
  * 空判定はページ側で行い、ここは 1 件以上の配列を受け取る前提。
  */
 export default function GalleryGrid({ items }: { items: GalleryItem[] }) {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const active = activeId
+    ? (items.find((item) => item.id === activeId) ?? null)
+    : null;
+
+  // 閉じたら、開いた起点のカードへフォーカスを返す(初回マウント時は何もしない)。
+  useEffect(() => {
+    if (activeId !== null) return;
+    const trigger = triggerRef.current;
+    if (trigger) {
+      trigger.focus();
+      triggerRef.current = null;
+    }
+  }, [activeId]);
+
   return (
-    <ul className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((item) => (
-        <li
-          key={item.id}
-          className="overflow-hidden rounded-2xl border border-babyblue-200 bg-white"
-        >
-          <div className="flex aspect-square items-center justify-center bg-white p-3">
-            <Image
-              src={item.image.src}
-              alt={item.image.alt}
-              width={800}
-              height={800}
-              loading="lazy"
-              sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 90vw"
-              className="max-h-full w-auto object-contain"
+    <>
+      <ul className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((item) => (
+          <li key={item.id}>
+            <GalleryCard
+              item={item}
+              onOpen={(selected, trigger) => {
+                triggerRef.current = trigger;
+                setActiveId(selected.id);
+              }}
             />
-          </div>
-          {(item.title || item.description) && (
-            <div className="border-t border-babyblue-100 px-4 py-3">
-              {item.title && (
-                <p className="font-bold text-night-900">{item.title.ja}</p>
-              )}
-              {item.description && (
-                <p className="mt-1 text-sm text-night-800/70">
-                  {item.description.ja}
-                </p>
-              )}
-            </div>
-          )}
-        </li>
-      ))}
-    </ul>
+          </li>
+        ))}
+      </ul>
+      <GalleryLightbox item={active} onClose={() => setActiveId(null)} />
+    </>
   );
 }
