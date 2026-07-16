@@ -29,9 +29,9 @@ export default function ProfilePage() {
               sizes="224px"
               className="size-56 object-contain"
             />
-            {siteConfig.temporaryArtworkNotice && (
+            {siteConfig.images.profile.notice && (
               <p className="mt-2 text-xs text-night-800/70">
-                {siteConfig.temporaryArtworkNotice}
+                {siteConfig.images.profile.notice}
               </p>
             )}
           </div>

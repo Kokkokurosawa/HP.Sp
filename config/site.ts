@@ -19,6 +19,11 @@ export type SiteImage = {
   src: string;
   /** 代替テキスト。実画像を設定するときに必ず記入する(空の場合はキャラクター名で代替)。 */
   alt: string;
+  /**
+   * この画像専用の注記(例: 仮画像運用中の断り書き)。画像の直近に小さく表示される。
+   * 注記の唯一の定義元はここ。空文字または未定義なら注記要素自体を DOM へ出さない。
+   */
+  notice?: string;
 };
 
 export const siteConfig = {
@@ -57,25 +62,23 @@ export const siteConfig = {
   images: {
     /** トップページのヒーロー(メインビジュアル)。実画像設定時は priority 読み込み */
     hero: {
-      // TODO: 正式キービジュアル確定後に差し替える(現在は開発用仮イラスト)
-      src: "/images/supitaro/supitaro-temporary-main.svg",
-      alt: "白い体と青い目を持つ、開発用のすぴたろう仮イラスト",
+      // 正式キービジュアル(背景透過 PNG・全身構図)。実画像のため priority 読み込み
+      src: "/images/supitaro/20251023sptaro_front_output_syuusei.png",
+      alt: "白い体に青い目、額の青いひし形、青い耳と尻尾を持つ、すぴたろうの全身イラスト",
+      // 正式画像のため注記なし(空文字 → 注記要素を出さない)
+      notice: "",
     },
     /** プロフィールページのキャラクター画像(通常の遅延読み込み) */
     profile: {
       // TODO: 正式キービジュアル確定後に差し替える(現在は開発用仮イラスト)
       src: "/images/supitaro/supitaro-temporary-main.svg",
       alt: "すぴたろうの全身が分かる、開発用の仮イラスト",
+      // まだ仮画像のため注記を表示する
+      notice: "現在は開発用イメージです",
     },
     /** Open Graph 画像(SNS シェア用)。ヒーローとは別に専用画像が必要 */
     og: { src: "", alt: "" },
   } satisfies Record<string, SiteImage>,
-
-  /**
-   * 仮画像(開発用イメージ)運用中の注記。キャラクター画像の近くに小さく表示される。
-   * 正式画像への差し替え時に空文字にすると、すべての表示箇所から消える。
-   */
-  temporaryArtworkNotice: "現在は開発用イメージです",
 
   /** グローバルナビゲーション(ここが唯一の定義元。Header / MobileMenu / Footer が参照する) */
   nav: [

@@ -54,9 +54,9 @@ export default function FloatingSupitaro() {
           </div>
         )}
       </motion.div>
-      {siteConfig.images.hero.src && siteConfig.temporaryArtworkNotice ? (
+      {siteConfig.images.hero.src && siteConfig.images.hero.notice ? (
         <p className="text-xs text-night-800/70">
-          {siteConfig.temporaryArtworkNotice}
+          {siteConfig.images.hero.notice}
         </p>
       ) : null}
     </div>
