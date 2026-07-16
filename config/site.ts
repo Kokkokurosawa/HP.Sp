@@ -70,11 +70,11 @@ export const siteConfig = {
     },
     /** プロフィールページのキャラクター画像(通常の遅延読み込み) */
     profile: {
-      // TODO: 正式キービジュアル確定後に差し替える(現在は開発用仮イラスト)
-      src: "/images/supitaro/supitaro-temporary-main.svg",
-      alt: "すぴたろうの全身が分かる、開発用の仮イラスト",
-      // まだ仮画像のため注記を表示する
-      notice: "現在は開発用イメージです",
+      // 正式キャラクター画像(すぴたろう正面ポートレート)。通常の遅延読み込み
+      src: "/images/supitaro/supitaro_Profile.png",
+      alt: "白い体に青い目、額の青いひし形、青い耳と2本の尻尾を持つ、すぴたろうの全身イラスト",
+      // 正式画像のため注記なし(空文字 → 注記要素を出さない)
+      notice: "",
     },
     /** Open Graph 画像(SNS シェア用)。ヒーローとは別に専用画像が必要 */
     og: { src: "", alt: "" },
