@@ -70,11 +70,12 @@ export default function Footer() {
           >
             <span className="flex size-11 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-babyblue-200 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:-translate-y-0.5">
               <Image
-                src="/images/supitaro/supitaro-temporary-main.svg"
+                src="/images/supitaro/supitaro_icon.png"
                 alt=""
                 width={32}
                 height={32}
-                className="size-7"
+                sizes="28px"
+                className="size-7 object-contain"
               />
             </span>
             <span className="text-[0.65rem] font-bold tracking-[0.25em] text-deepblue-600">
