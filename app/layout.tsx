@@ -5,13 +5,12 @@ import Header from "@/components/Header";
 import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  // TODO: siteUrl 確定後に canonical / OG URL が自動で解決される(config/site.ts で設定)
-  ...(siteConfig.siteUrl
-    ? {
-        metadataBase: new URL(siteConfig.siteUrl),
-        alternates: { canonical: "/" },
-      }
-    : {}),
+  // metadataBase: OG など相対 metadata URL を絶対 URL へ解決するための暫定基準 URL。
+  // これは「公開サイトの正式 URL」ではない。正式ドメイン未確定のため Stage A(Vercel)を暫定使用する。
+  // canonical には使用しない(canonical は siteConfig.siteUrl 確定後のみ出力する)。
+  metadataBase: new URL("https://supitaro-site.vercel.app"),
+  // TODO: siteUrl 確定後に canonical / OG URL が正式ドメインで解決される(config/site.ts で設定)
+  ...(siteConfig.siteUrl ? { alternates: { canonical: "/" } } : {}),
   title: {
     default: siteConfig.siteName,
     template: `%s | ${siteConfig.siteName}`,
@@ -23,12 +22,20 @@ export const metadata: Metadata = {
     siteName: siteConfig.siteName,
     locale: "ja_JP",
     type: "website",
-    // TODO: OG 画像確定後に images を設定する(siteConfig.images.og。ヒーローとは別に専用画像が必要)
+    images: [
+      {
+        url: siteConfig.images.og.src,
+        width: 1466,
+        height: 643,
+        alt: siteConfig.images.og.alt,
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: siteConfig.siteName,
     description: siteConfig.description,
+    images: [siteConfig.images.og.src],
   },
 };
 

@@ -76,8 +76,11 @@ export const siteConfig = {
       // 正式画像のため注記なし(空文字 → 注記要素を出さない)
       notice: "",
     },
-    /** Open Graph 画像(SNS シェア用)。ヒーローとは別に専用画像が必要 */
-    og: { src: "", alt: "" },
+    /** Open Graph 画像(SNS シェア用)。ヒーローとは別に専用画像が必要(1466×643) */
+    og: {
+      src: "/images/og/supitaro-og.png",
+      alt: "押し入れから覗くすぴたろうと、サイト名「すぴたろう」、説明文「宇宙からきた不思議ないきもの。」を描いた共有画像",
+    },
   } satisfies Record<string, SiteImage>,
 
   /** グローバルナビゲーション(ここが唯一の定義元。Header / MobileMenu / Footer が参照する) */
