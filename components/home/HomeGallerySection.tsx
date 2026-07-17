@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import SectionHeading from "@/components/SectionHeading";
 import GalleryCard from "@/components/gallery/GalleryCard";
 import GalleryLightbox from "@/components/gallery/GalleryLightbox";
-import type { GalleryItem } from "@/content/gallery";
+import type { GalleryView } from "@/content/galleryContent";
 
 /**
  * トップページのデザインギャラリー(プレビュー)。
@@ -14,9 +14,26 @@ import type { GalleryItem } from "@/content/gallery";
  *   (別ライトボックスは作らない。No-JS では figure、JS 有効時にカード全面が button 化する挙動も共通)。
  * - 配列を前提に描画し、単一項目を直書きしない。カードは独立し、選択中の項目を state で管理する。
  *   将来公開作品が増えたら、この <ul> を横並びトラック(overflow-x-auto)へ替えるだけでカルーセルへ移行できる。
+ * - 見出し/リード/CTA/作品/リンク先は Server で locale 解決済み(§22)。href は localizedPath で locale 別。
  * - 空判定はページ側で行う前提(ここは 1 件以上を受け取る。念のため空なら何も描画しない)。
  */
-export default function HomeGallerySection({ items }: { items: GalleryItem[] }) {
+export default function HomeGallerySection({
+  items,
+  heading,
+  lead,
+  cta,
+  galleryHref,
+  viewLarger,
+  closeLabel,
+}: {
+  items: readonly GalleryView[];
+  heading: string;
+  lead: string;
+  cta: string;
+  galleryHref: string;
+  viewLarger: string;
+  closeLabel: string;
+}) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -41,10 +58,8 @@ export default function HomeGallerySection({ items }: { items: GalleryItem[] }) 
       aria-labelledby="home-gallery-heading"
       className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16"
     >
-      <SectionHeading id="home-gallery-heading">デザインギャラリー</SectionHeading>
-      <p className="mt-4 leading-relaxed text-night-800/80">
-        すぴたろうのデザインを、すこしだけ。
-      </p>
+      <SectionHeading id="home-gallery-heading">{heading}</SectionHeading>
+      <p className="mt-4 leading-relaxed text-night-800/80">{lead}</p>
 
       {/* プレビュー用トラック: 現在は中央寄せ。将来は横並び(overflow-x-auto)へ拡張できる。
           li の幅でカードを小さく保つ(モバイルは画面幅の約 68%・最大 260px、sm 以上は 200px)。 */}
@@ -53,6 +68,7 @@ export default function HomeGallerySection({ items }: { items: GalleryItem[] }) 
           <li key={item.id} className="w-[min(68vw,260px)] sm:w-[200px]">
             <GalleryCard
               item={item}
+              viewLarger={viewLarger}
               variant="compact"
               onOpen={(selected, trigger) => {
                 triggerRef.current = trigger;
@@ -65,12 +81,16 @@ export default function HomeGallerySection({ items }: { items: GalleryItem[] }) 
 
       {/* 専用ページへの導線。ライトボックスを開く操作(カードの button)とは別要素の純粋なリンク。 */}
       <div className="mt-8 text-center">
-        <Button href="/gallery" variant="secondary">
-          ギャラリーを見る
+        <Button href={galleryHref} variant="secondary">
+          {cta}
         </Button>
       </div>
 
-      <GalleryLightbox item={active} onClose={() => setActiveId(null)} />
+      <GalleryLightbox
+        item={active}
+        closeLabel={closeLabel}
+        onClose={() => setActiveId(null)}
+      />
     </section>
   );
 }

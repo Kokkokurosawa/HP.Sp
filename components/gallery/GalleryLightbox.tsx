@@ -3,31 +3,36 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import type { GalleryItem } from "@/content/gallery";
+import type { GalleryView } from "@/content/galleryContent";
 
 /**
  * ギャラリー画像を大きく閲覧するライトボックス(ダイアログ)。
  * モバイルは画面全体に近いオーバーレイ、デスクトップは中央ダイアログ(同一コンポーネントを CSS で適応)。
  * 背景 inert・スクロールロック・フォーカス移動/トラップ/返却・Escape・reduced-motion 即時表示に対応。
  * Sprint 12 のプロフィールダイアログと同じ原理を用いる(そちらは変更しない)。
+ * 表示文字列は Server で locale 解決済み(§22): 作品(GalleryView)は title/alt を、閉じる文言は closeLabel。
  * item が null の間は何も描画しない(SSR では出力されず、操作後にクライアントでのみ表示)。
  */
 export default function GalleryLightbox({
   item,
+  closeLabel,
   onClose,
 }: {
-  item: GalleryItem | null;
+  item: GalleryView | null;
+  closeLabel: string;
   onClose: () => void;
 }) {
   if (!item) return null;
-  return <LightboxInner item={item} onClose={onClose} />;
+  return <LightboxInner item={item} closeLabel={closeLabel} onClose={onClose} />;
 }
 
 function LightboxInner({
   item,
+  closeLabel,
   onClose,
 }: {
-  item: GalleryItem;
+  item: GalleryView;
+  closeLabel: string;
   onClose: () => void;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -39,7 +44,7 @@ function LightboxInner({
   const [shown, setShown] = useState(prefersReduced);
 
   const titleId = `gallery-lightbox-title-${item.id}`;
-  const hasTitle = Boolean(item.title?.ja);
+  const hasTitle = Boolean(item.title);
 
   // マウント時: portal 追加 → 背景 inert → スクロールロック → フォーカス移動 → キーボード登録。
   // アンマウント時に順に復元する(開始前の値を保存して戻す。複数回開閉しても壊れない)。
@@ -140,7 +145,7 @@ function LightboxInner({
         aria-modal="true"
         {...(hasTitle
           ? { "aria-labelledby": titleId }
-          : { "aria-label": item.image.alt })}
+          : { "aria-label": item.alt })}
         className={`relative z-10 flex max-h-full w-full max-w-3xl flex-col items-center gap-4 transition duration-300 ease-out motion-reduce:transition-none ${
           shown ? "scale-100 opacity-100" : "scale-95 opacity-0"
         }`}
@@ -150,14 +155,14 @@ function LightboxInner({
           ref={closeButtonRef}
           type="button"
           onClick={onClose}
-          aria-label="画像を閉じる"
+          aria-label={closeLabel}
           style={{
             top: "max(1rem, env(safe-area-inset-top))",
             right: "max(1rem, env(safe-area-inset-right))",
           }}
           className="fixed z-20 inline-flex size-11 items-center justify-center rounded-full bg-white/90 text-night-900 shadow-md transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
-          <span className="sr-only">画像を閉じる</span>
+          <span className="sr-only">{closeLabel}</span>
           <svg
             aria-hidden="true"
             viewBox="0 0 24 24"
@@ -173,8 +178,8 @@ function LightboxInner({
 
         {/* 画像: 元画像を切り取らず全体表示(object-contain)。lightbox では priority を付けない。 */}
         <Image
-          src={item.image.src}
-          alt={item.image.alt}
+          src={item.src}
+          alt={item.alt}
           width={1000}
           height={1000}
           sizes="(min-width: 768px) 640px, 90vw"
@@ -186,7 +191,7 @@ function LightboxInner({
             id={titleId}
             className="shrink-0 text-center text-sm font-medium text-white sm:text-base"
           >
-            {item.title?.ja}
+            {item.title}
           </p>
         )}
       </div>

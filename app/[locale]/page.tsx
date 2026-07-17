@@ -10,7 +10,7 @@ import HomeGallerySection from "@/components/home/HomeGallerySection";
 import SectionHeading from "@/components/SectionHeading";
 import SocialFollowLinks from "@/components/SocialFollowLinks";
 import SiteShell from "@/components/i18n/SiteShell";
-import { getPublishedGalleryItems } from "@/content/gallery";
+import { getGalleryContent } from "@/content/galleryContent";
 import { getLatestNews } from "@/content/news";
 import { getTopPage, type TopPageContent } from "@/content/topPage";
 import { isLocale, locales, type Locale } from "@/lib/i18n/locales";
@@ -34,13 +34,14 @@ export async function generateMetadata({
 
 /**
  * トップページ本文（全 locale 共通構造・text は locale 別）。
- * 日本語のみ Gallery プレビューと News セクションを表示する（D-D/D-C: 外国語では非表示）。
+ * Gallery プレビューは全 locale で表示（Sprint 35 で外国語 Gallery を翻訳・D-E で再表示）。
+ * News セクションは日本語のみ（D-C: 外国語では非表示）。
  * 日本語トップは従来と同一の描画（文言・順序・デザイン不変）。
  */
 function TopPageBody({ locale, text }: { locale: Locale; text: TopPageContent }) {
   const profileHref = localizedPath(locale, "profile");
   const showJapaneseOnlySections = locale === "ja";
-  const galleryItems = showJapaneseOnlySections ? getPublishedGalleryItems() : [];
+  const gallery = getGalleryContent(locale);
   const latestNews = showJapaneseOnlySections ? getLatestNews(3) : [];
 
   // 訪問者の自然な流れ: まずデザインを見せる(ギャラリー) → キャラを知る(すぴたろうって)
@@ -49,10 +50,18 @@ function TopPageBody({ locale, text }: { locale: Locale; text: TopPageContent })
     <>
       <Hero text={text.hero} profileHref={profileHref} />
 
-      {/* デザインギャラリーのプレビュー。公開作品が無ければ描画しない。外国語は Sprint 35 まで非表示。 */}
-      {galleryItems.length > 0 && (
+      {/* デザインギャラリーのプレビュー。公開作品が無ければ描画しない（全 locale・見出し等は現在 locale）。 */}
+      {gallery.items.length > 0 && (
         <FadeIn>
-          <HomeGallerySection items={galleryItems} />
+          <HomeGallerySection
+            items={gallery.items}
+            heading={gallery.strings.preview.heading}
+            lead={gallery.strings.preview.lead}
+            cta={gallery.strings.preview.cta}
+            galleryHref={localizedPath(locale, "gallery")}
+            viewLarger={gallery.strings.viewLarger}
+            closeLabel={gallery.strings.closeLabel}
+          />
         </FadeIn>
       )}
 

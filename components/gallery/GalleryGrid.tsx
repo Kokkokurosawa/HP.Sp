@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { GalleryItem } from "@/content/gallery";
+import type { GalleryView } from "@/content/galleryContent";
 import GalleryCard from "./GalleryCard";
 import GalleryLightbox from "./GalleryLightbox";
 
@@ -11,9 +11,18 @@ import GalleryLightbox from "./GalleryLightbox";
  * - カードを押すと画像を大きく表示するライトボックス(GalleryLightbox)を開く。
  * - インタラクションに必要な最小範囲だけを Client Component にする(ページは Server Component のまま)。
  * - 画像・タイトルはカードに常時表示され、No-JS でも通常の静的ギャラリーとして読める。
+ * - 表示文字列(viewLarger/closeLabel)と作品(GalleryView)は Server で locale 解決済みのものを受け取る(§22)。
  * 空判定はページ側で行い、ここは 1 件以上の配列を受け取る前提。
  */
-export default function GalleryGrid({ items }: { items: GalleryItem[] }) {
+export default function GalleryGrid({
+  items,
+  viewLarger,
+  closeLabel,
+}: {
+  items: readonly GalleryView[];
+  viewLarger: string;
+  closeLabel: string;
+}) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -38,6 +47,7 @@ export default function GalleryGrid({ items }: { items: GalleryItem[] }) {
           <li key={item.id}>
             <GalleryCard
               item={item}
+              viewLarger={viewLarger}
               onOpen={(selected, trigger) => {
                 triggerRef.current = trigger;
                 setActiveId(selected.id);
@@ -46,7 +56,11 @@ export default function GalleryGrid({ items }: { items: GalleryItem[] }) {
           </li>
         ))}
       </ul>
-      <GalleryLightbox item={active} onClose={() => setActiveId(null)} />
+      <GalleryLightbox
+        item={active}
+        closeLabel={closeLabel}
+        onClose={() => setActiveId(null)}
+      />
     </>
   );
 }

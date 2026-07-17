@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import type { GalleryItem } from "@/content/gallery";
+import type { GalleryView } from "@/content/galleryContent";
 
 /**
  * ギャラリー 1 枚のカード。進行的強化で No-JS でも意味的に正しくする:
@@ -13,18 +13,23 @@ import type { GalleryItem } from "@/content/gallery";
  * SSR と初回クライアント描画は同一(button なし)なので hydration mismatch は起きない。
  * (Client Component の子として読み込まれるため、hydration 用に "use client" を付ける)
  *
- * variant による「大きく見る」ヒントの置き場所だけが差分(操作・a11y は両者共通):
+ * 表示文字列は Server で locale 解決済み(§22): 作品(GalleryView)は title/alt/openLabel を持ち、
+ * カードの可視ヒント文言は viewLarger prop で受け取る。
+ *
+ * variant による拡大ヒントの置き場所だけが差分(操作・a11y は両者共通):
  * - "default": /gallery 用。従来どおりカード下部(items-end)の右にヒントを重ねる(表示は据え置き)。
  * - "compact": トップページの小型プレビュー用。ヒントを画像領域内の右下へ置き、figcaption のタイトルと
  *   領域を分ける(小さいカードでもタイトルとヒントが重ならない)。どちらもタップ領域はカード全面の button。
  */
 export default function GalleryCard({
   item,
+  viewLarger,
   onOpen,
   variant = "default",
 }: {
-  item: GalleryItem;
-  onOpen: (item: GalleryItem, trigger: HTMLButtonElement) => void;
+  item: GalleryView;
+  viewLarger: string;
+  onOpen: (item: GalleryView, trigger: HTMLButtonElement) => void;
   variant?: "default" | "compact";
 }) {
   // マウント後に操作可能化する(SSR / No-JS では figure のまま)。
@@ -34,8 +39,6 @@ export default function GalleryCard({
     const raf = requestAnimationFrame(() => setInteractive(true));
     return () => cancelAnimationFrame(raf);
   }, []);
-
-  const openLabel = `${item.title?.ja ?? item.image.alt}を大きく見る`;
 
   // 拡大できる手掛かり。色だけに依存しないよう虫めがねアイコン + 文言を添える。
   // pointer-events-none なのでクリックはカード全面の button に通る(default/compact 共通の見た目)。
@@ -54,7 +57,7 @@ export default function GalleryCard({
         <circle cx="11" cy="11" r="7" />
         <path d="M21 21l-4.3-4.3M11 8v6M8 11h6" />
       </svg>
-      大きく見る
+      {viewLarger}
     </span>
   );
 
@@ -62,8 +65,8 @@ export default function GalleryCard({
     <figure className="relative m-0 flex w-full flex-col overflow-hidden rounded-2xl border border-babyblue-200 bg-white text-left">
       <span className="relative flex aspect-square items-center justify-center bg-white p-3">
         <Image
-          src={item.image.src}
-          alt={item.image.alt}
+          src={item.src}
+          alt={item.alt}
           width={800}
           height={800}
           loading="lazy"
@@ -77,9 +80,9 @@ export default function GalleryCard({
         )}
       </span>
 
-      {item.title?.ja && (
+      {item.title && (
         <figcaption className="w-full border-t border-babyblue-100 px-4 py-3">
-          <span className="block font-bold text-night-900">{item.title.ja}</span>
+          <span className="block font-bold text-night-900">{item.title}</span>
         </figcaption>
       )}
 
@@ -89,7 +92,7 @@ export default function GalleryCard({
         <button
           type="button"
           aria-haspopup="dialog"
-          aria-label={openLabel}
+          aria-label={item.openLabel}
           onClick={(event) => onOpen(item, event.currentTarget)}
           className="group absolute inset-0 flex items-end justify-end rounded-2xl p-3 transition-colors hover:bg-night-900/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepblue-500"
         >
