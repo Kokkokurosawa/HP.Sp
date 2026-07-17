@@ -12,20 +12,24 @@ import type { ProfileTrait } from "@/content/profile";
  */
 export default function ProfileDetailSheet({
   trait,
+  closeLabel,
   onClose,
 }: {
   trait: ProfileTrait | null;
+  closeLabel: string;
   onClose: () => void;
 }) {
   if (!trait) return null;
-  return <SheetInner trait={trait} onClose={onClose} />;
+  return <SheetInner trait={trait} closeLabel={closeLabel} onClose={onClose} />;
 }
 
 function SheetInner({
   trait,
+  closeLabel,
   onClose,
 }: {
   trait: ProfileTrait;
+  closeLabel: string;
   onClose: () => void;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -154,7 +158,7 @@ function SheetInner({
             onClick={onClose}
             className="-mr-1 inline-flex size-11 shrink-0 items-center justify-center rounded-full text-night-800 transition-colors hover:bg-babyblue-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepblue-500"
           >
-            <span className="sr-only">閉じる</span>
+            <span className="sr-only">{closeLabel}</span>
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"

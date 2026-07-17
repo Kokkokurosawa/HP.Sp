@@ -3,9 +3,9 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import SectionHeading from "@/components/SectionHeading";
 import ProfileTraitGrid from "@/components/profile/ProfileTraitGrid";
-import LocaleScaffold from "@/components/i18n/LocaleScaffold";
 import SiteShell from "@/components/i18n/SiteShell";
 import { profile } from "@/content/profile";
+import { getProfile, type ProfilePageContent } from "@/content/profileContent";
 import { siteConfig } from "@/config/site";
 import { isLocale, locales } from "@/lib/i18n/locales";
 
@@ -14,6 +14,8 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+// 外国語プロフィールは正式翻訳済みだが、サイト全体の多言語公開（Gallery 本文・言語別 metadata・
+// canonical・hreflang 等）が未完成のため引き続き noindex（Sprint 34 §19）。ja は既定挙動。
 export async function generateMetadata({
   params,
 }: {
@@ -29,12 +31,16 @@ export async function generateMetadata({
   return { robots: { index: false, follow: false } };
 }
 
-// 日本語プロフィール（既存 app/profile/page.tsx の内容をそのまま）。
-function JapaneseProfile() {
+/**
+ * プロフィールページ本文（全 locale 共通構造・content は locale 別）。
+ * 日本語トップと同じく、日本語は従来と同一の描画（文言・順序・デザイン・操作不変）。
+ * ja の name/intro/traits/words/upcoming は content/profile.ts、画像 alt は siteConfig を参照した値。
+ */
+function ProfileBody({ content }: { content: ProfilePageContent }) {
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
       <h1 className="text-2xl font-bold text-night-900 sm:text-3xl">
-        プロフィール
+        {content.pageTitle}
       </h1>
 
       <div className="mt-10 flex flex-col gap-10 md:flex-row md:items-start">
@@ -43,7 +49,7 @@ function JapaneseProfile() {
           <div className="mx-auto shrink-0 text-center md:mx-0">
             <Image
               src={siteConfig.images.profile.src}
-              alt={siteConfig.images.profile.alt || siteConfig.characterName}
+              alt={content.imageAlt || siteConfig.characterName}
               width={560}
               height={560}
               sizes="224px"
@@ -74,10 +80,10 @@ function JapaneseProfile() {
         <div className="min-w-0 flex-1 space-y-12">
           <section aria-labelledby="profile-basic-heading">
             <SectionHeading id="profile-basic-heading">
-              {profile.name}
+              {content.name}
             </SectionHeading>
             <div className="mt-4 space-y-1 leading-loose text-night-800/90">
-              {profile.intro.map((line) => (
+              {content.intro.map((line) => (
                 <p key={line}>{line}</p>
               ))}
             </div>
@@ -85,25 +91,29 @@ function JapaneseProfile() {
 
           <section aria-labelledby="profile-traits-heading">
             <SectionHeading id="profile-traits-heading">
-              すぴたろうのこと
+              {content.traits.heading}
             </SectionHeading>
             <p className="mt-4 text-sm leading-relaxed text-night-800/70">
-              気になる項目をえらぶと、すぴたろうのことをすこしずつ知れます。
+              {content.traits.lead}
             </p>
             {/* 各カードは進行的強化(ProfileTraitCard): No-JS では詳細全文を含む静的カード、
                 JS 有効時に button 化してシートで詳細を開く。noscript 用の CSS 切替は不要。 */}
-            <ProfileTraitGrid traits={profile.traits} />
+            <ProfileTraitGrid
+              traits={content.traits.items}
+              moreLabel={content.traits.moreLabel}
+              closeLabel={content.traits.closeLabel}
+            />
           </section>
 
           <section aria-labelledby="profile-words-heading">
             <SectionHeading id="profile-words-heading">
-              すぴたろうの言葉
+              {content.words.heading}
             </SectionHeading>
             <p className="mt-4 text-sm leading-relaxed text-night-800/70">
-              すぴたろうは、人間が完全には理解できない独自の言葉を話します。
+              {content.words.lead}
             </p>
             <ul className="mt-4 flex flex-wrap gap-2">
-              {profile.words.map((word) => (
+              {content.words.items.map((word) => (
                 <li
                   key={word}
                   className="rounded-full bg-babyblue-100 px-4 py-2 font-bold text-deepblue-700"
@@ -116,17 +126,17 @@ function JapaneseProfile() {
 
           <section aria-labelledby="profile-upcoming-heading">
             <SectionHeading id="profile-upcoming-heading">
-              くわしい設定
+              {content.upcoming.heading}
             </SectionHeading>
-            {profile.upcoming.length > 0 ? (
+            {content.upcoming.items.length > 0 ? (
               <ul className="mt-4 space-y-2 leading-relaxed text-night-800/90">
-                {profile.upcoming.map((entry) => (
+                {content.upcoming.items.map((entry) => (
                   <li key={entry}>{entry}</li>
                 ))}
               </ul>
             ) : (
               <p className="mt-4 rounded-2xl border border-dashed border-babyblue-300 bg-babyblue-50/50 p-5 text-sm text-night-800/70">
-                準備中です。すこしずつ増えていきます。
+                {content.upcoming.emptyNotice}
               </p>
             )}
           </section>
@@ -145,7 +155,7 @@ export default async function ProfilePage({
   if (!isLocale(locale)) notFound();
   return (
     <SiteShell locale={locale} routeKey="profile">
-      {locale === "ja" ? <JapaneseProfile /> : <LocaleScaffold locale={locale} />}
+      <ProfileBody content={getProfile(locale)} />
     </SiteShell>
   );
 }

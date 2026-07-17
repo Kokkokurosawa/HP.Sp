@@ -14,9 +14,11 @@ import type { ProfileTrait } from "@/content/profile";
  */
 export default function ProfileTraitCard({
   trait,
+  moreLabel,
   onOpen,
 }: {
   trait: ProfileTrait;
+  moreLabel: string;
   onOpen: (trait: ProfileTrait, trigger: HTMLButtonElement) => void;
 }) {
   // マウント後に操作可能化する(SSR / No-JS では静的カードのまま)。
@@ -59,7 +61,7 @@ export default function ProfileTraitCard({
         {summary}
         {/* ダイアログ起動の視覚的ヒント(色だけに依存しないよう文言 + 矢印)。 */}
         <span className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-deepblue-600">
-          くわしく見る
+          {moreLabel}
           <svg
             aria-hidden="true"
             viewBox="0 0 24 24"

@@ -9,11 +9,16 @@ import ProfileDetailSheet from "./ProfileDetailSheet";
  * タップできるプロフィール項目のグリッド + 詳細シートの開閉制御。
  * インタラクションに必要な最小範囲だけを Client Component にする。
  * 詳細本文は各カードに No-JS 用として SSR 済みで、JS 有効時はシートで表示する。
+ * moreLabel（カード操作ヒント）と closeLabel（シート閉じる）は locale 別に Server から受け取る。
  */
 export default function ProfileTraitGrid({
   traits,
+  moreLabel,
+  closeLabel,
 }: {
-  traits: ProfileTrait[];
+  traits: readonly ProfileTrait[];
+  moreLabel: string;
+  closeLabel: string;
 }) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -39,6 +44,7 @@ export default function ProfileTraitGrid({
           <li key={trait.id} className="h-full">
             <ProfileTraitCard
               trait={trait}
+              moreLabel={moreLabel}
               onOpen={(selected, trigger) => {
                 triggerRef.current = trigger;
                 setActiveId(selected.id);
@@ -47,7 +53,11 @@ export default function ProfileTraitGrid({
           </li>
         ))}
       </ul>
-      <ProfileDetailSheet trait={active} onClose={() => setActiveId(null)} />
+      <ProfileDetailSheet
+        trait={active}
+        closeLabel={closeLabel}
+        onClose={() => setActiveId(null)}
+      />
     </>
   );
 }
