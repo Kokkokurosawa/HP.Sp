@@ -21,7 +21,6 @@ export type {
   Dictionary,
   CommonDictionary,
   NavigationDictionary,
-  LocaleScaffoldDictionary,
   AccessibilityDictionary,
 } from "./schema";
 

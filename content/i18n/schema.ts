@@ -29,5 +29,4 @@ export type Dictionary = DeepStringShape<typeof ja>;
 /** セクション別の型(Client Component へ必要な部分だけ渡す設計を支える / §10・§13)。 */
 export type CommonDictionary = Dictionary["common"];
 export type NavigationDictionary = Dictionary["navigation"];
-export type LocaleScaffoldDictionary = Dictionary["localeScaffold"];
 export type AccessibilityDictionary = Dictionary["accessibility"];

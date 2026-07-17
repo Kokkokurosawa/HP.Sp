@@ -3,7 +3,7 @@ import type { Dictionary } from "./schema";
 /**
  * 한국어(ko)辞書 —— **暫定・未検証の内部用文言(AI 初稿)**。
  *
- * - 公開対象は現時点で `localeScaffold` のみ(noindex scaffold)。他は型基盤の最小値。
+ * - 共通 UI chrome と言語切替の自称表記(language.name)へ適用済み(Sprint 31/32)。他は AI 初稿。
  * - Sprint 27 D-03 の AI 初稿段階。正式翻訳 Sprint で人間確認・置換するまで正式文にしない。
  * - `satisfies Dictionary` で ja と同一キー構造・葉 string を型で強制。
  */
@@ -20,10 +20,8 @@ export const ko = {
     footerNavigationLabel: "사이트 메뉴",
     languageSwitcherLabel: "언어",
   },
-  localeScaffold: {
-    title: "한국어",
-    description: "이 언어 버전은 준비 중입니다.",
-    status: "준비 중",
+  language: {
+    name: "한국어",
   },
   accessibility: {
     skipToContent: "본문으로 건너뛰기",

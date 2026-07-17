@@ -26,14 +26,9 @@ export const ja = {
     footerNavigationLabel: "サイトメニュー",
     languageSwitcherLabel: "言語",
   },
-  /**
-   * 外国語 noindex scaffold の表示文言(Sprint 28 の準備中プレースホルダー)。
-   * 日本語版では scaffold は表示されない(正本としての参照値)。
-   */
-  localeScaffold: {
-    title: "日本語",
-    description: "この言語版は準備中です。",
-    status: "準備中",
+  /** 言語切替 UI 用。この locale 自身の言語表示名(自称表記・Footer 言語切替に表示)。 */
+  language: {
+    name: "日本語",
   },
   /** アクセシビリティ用の定型文(skip リンク・メニュー開閉ラベル)。 */
   accessibility: {
