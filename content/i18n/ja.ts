@@ -19,11 +19,12 @@ export const ja = {
     gallery: "ギャラリー",
     news: "お知らせ",
   },
-  /** ナビゲーション領域のラベル(スクリーンリーダー向けの領域名。Header/モバイル/Footer で別々)。 */
+  /** ナビゲーション領域のラベル(スクリーンリーダー向けの領域名。Header/モバイル/Footer/言語切替で別々)。 */
   navigation: {
     mainNavigationLabel: "メインナビゲーション",
     mobileNavigationLabel: "モバイルナビゲーション",
     footerNavigationLabel: "サイトメニュー",
+    languageSwitcherLabel: "言語",
   },
   /**
    * 外国語 noindex scaffold の表示文言(Sprint 28 の準備中プレースホルダー)。

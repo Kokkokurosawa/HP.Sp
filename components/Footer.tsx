@@ -4,13 +4,15 @@ import SocialFollowLinks from "@/components/SocialFollowLinks";
 import type { ResolvedNavItem } from "@/components/i18n/resolveNav";
 
 type FooterProps = {
-  /** 解決済みナビ（URL + locale 別ラベル）。 */
+  /** 解決済みナビ（locale 別 URL + locale 別ラベル）。 */
   nav: ResolvedNavItem[];
   /** 「サイトメニュー」見出し（footer nav の aria-labelledby 参照先。locale 別）。 */
   menuHeading: string;
+  /** 言語切替領域（Sprint 32）。404 など locale を持たない箇所では省略して非表示にできる。 */
+  languageSwitcher?: React.ReactNode;
 };
 
-export default function Footer({ nav, menuHeading }: FooterProps) {
+export default function Footer({ nav, menuHeading, languageSwitcher }: FooterProps) {
   return (
     <footer className="border-t border-babyblue-200 bg-babyblue-50">
       <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-14">
@@ -69,7 +71,10 @@ export default function Footer({ nav, menuHeading }: FooterProps) {
         {/* ⑥ 区切り線: 控えめな点線 */}
         <hr className="mx-auto mt-8 max-w-md border-0 border-t border-dotted border-babyblue-300" />
 
-        {/* ⑦ コピーライト: 将来 Privacy Policy / Terms / Language を足せる余白を残す */}
+        {/* ⑦ 言語切替（Sprint 32）: locale を持つページでのみ表示。404 等では省略される。 */}
+        {languageSwitcher}
+
+        {/* ⑧ コピーライト */}
         <p className="mt-6 text-center text-xs text-night-800/70">© Supitaro</p>
       </div>
     </footer>

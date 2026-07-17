@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import SectionHeading from "@/components/SectionHeading";
 import ProfileTraitGrid from "@/components/profile/ProfileTraitGrid";
 import LocaleScaffold from "@/components/i18n/LocaleScaffold";
+import SiteShell from "@/components/i18n/SiteShell";
 import { profile } from "@/content/profile";
 import { siteConfig } from "@/config/site";
 import { isLocale, locales } from "@/lib/i18n/locales";
@@ -142,6 +143,9 @@ export default async function ProfilePage({
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  if (locale === "ja") return <JapaneseProfile />;
-  return <LocaleScaffold locale={locale} />;
+  return (
+    <SiteShell locale={locale} routeKey="profile">
+      {locale === "ja" ? <JapaneseProfile /> : <LocaleScaffold locale={locale} />}
+    </SiteShell>
+  );
 }

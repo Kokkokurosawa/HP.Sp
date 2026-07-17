@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import GalleryEmptyState from "@/components/gallery/GalleryEmptyState";
 import GalleryGrid from "@/components/gallery/GalleryGrid";
 import LocaleScaffold from "@/components/i18n/LocaleScaffold";
+import SiteShell from "@/components/i18n/SiteShell";
 import { getPublishedGalleryItems } from "@/content/gallery";
 import { siteConfig } from "@/config/site";
 import { isLocale, locales } from "@/lib/i18n/locales";
@@ -54,6 +55,9 @@ export default async function GalleryPage({
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  if (locale === "ja") return <JapaneseGallery />;
-  return <LocaleScaffold locale={locale} />;
+  return (
+    <SiteShell locale={locale} routeKey="gallery">
+      {locale === "ja" ? <JapaneseGallery /> : <LocaleScaffold locale={locale} />}
+    </SiteShell>
+  );
 }

@@ -19,6 +19,7 @@ export const zhHans = {
     mainNavigationLabel: "主导航",
     mobileNavigationLabel: "移动端导航",
     footerNavigationLabel: "网站菜单",
+    languageSwitcherLabel: "语言",
   },
   localeScaffold: {
     title: "简体中文",

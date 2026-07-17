@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { resolveNav } from "@/components/i18n/resolveNav";
 import { getDictionary } from "@/content/i18n";
+import { localizedPath } from "@/lib/i18n/routes";
 
 /**
  * グローバル 404（app/[locale] を唯一のルートレイアウトにした R2 構成では、未マッチ path は
@@ -20,8 +21,9 @@ export const metadata: Metadata = {
 export default function GlobalNotFound() {
   // 404 は locale を持たないグローバルフォールバック（B1 回避のため常に日本語 chrome）。
   // Header/Footer は共通コンポーネント化されたので、ja 辞書で解決した文字列を渡す（本文は日本語のまま）。
+  // §9: 404 では言語切替を出さない（Footer の languageSwitcher を省略）。日本語トップを現在位置扱い。
   const dict = getDictionary("ja");
-  const nav = resolveNav(dict);
+  const nav = resolveNav(dict, "ja");
   return (
     <html lang="ja" className="h-full antialiased">
       <body className="flex min-h-dvh flex-col bg-white font-sans text-night-900">
@@ -35,6 +37,7 @@ export default function GlobalNotFound() {
           nav={nav}
           navLabel={dict.navigation.mainNavigationLabel}
           homeLabel={dict.common.home}
+          homeHref={localizedPath("ja", "home")}
           menu={{
             navLabel: dict.navigation.mobileNavigationLabel,
             open: dict.accessibility.openMenu,

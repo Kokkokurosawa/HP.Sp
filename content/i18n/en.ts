@@ -21,6 +21,7 @@ export const en = {
     mainNavigationLabel: "Main navigation",
     mobileNavigationLabel: "Mobile navigation",
     footerNavigationLabel: "Site menu",
+    languageSwitcherLabel: "Languages",
   },
   localeScaffold: {
     title: "English",

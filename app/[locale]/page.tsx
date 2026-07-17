@@ -10,6 +10,7 @@ import HomeGallerySection from "@/components/home/HomeGallerySection";
 import SectionHeading from "@/components/SectionHeading";
 import SocialFollowLinks from "@/components/SocialFollowLinks";
 import LocaleScaffold from "@/components/i18n/LocaleScaffold";
+import SiteShell from "@/components/i18n/SiteShell";
 import { getPublishedGalleryItems } from "@/content/gallery";
 import { getLatestNews } from "@/content/news";
 import { isLocale, locales } from "@/lib/i18n/locales";
@@ -95,6 +96,9 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  if (locale === "ja") return <JapaneseHome />;
-  return <LocaleScaffold locale={locale} />;
+  return (
+    <SiteShell locale={locale} routeKey="home">
+      {locale === "ja" ? <JapaneseHome /> : <LocaleScaffold locale={locale} />}
+    </SiteShell>
+  );
 }

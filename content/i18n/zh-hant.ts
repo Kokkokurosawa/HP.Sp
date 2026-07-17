@@ -19,6 +19,7 @@ export const zhHant = {
     mainNavigationLabel: "主導覽",
     mobileNavigationLabel: "行動版導覽",
     footerNavigationLabel: "網站選單",
+    languageSwitcherLabel: "語言",
   },
   localeScaffold: {
     title: "繁體中文",

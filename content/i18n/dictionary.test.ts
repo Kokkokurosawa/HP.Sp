@@ -121,16 +121,32 @@ test("全辞書が ja と同一のキー構造(欠落・余分なキーが無い
 
 // ---- Sprint 31: 共通 UI 定型文の辞書適用 ----
 
-test("navigation の 3 領域名(main/mobile/footer)が全 locale に存在し互いに異なる", () => {
+test("navigation の 4 領域名(main/mobile/footer/language)が全 locale に存在し互いに異なる", () => {
   for (const l of locales) {
     const n = getDictionary(l).navigation;
     assert.ok(n.mainNavigationLabel, `${l} に mainNavigationLabel が無い`);
     assert.ok(n.mobileNavigationLabel, `${l} に mobileNavigationLabel が無い`);
     assert.ok(n.footerNavigationLabel, `${l} に footerNavigationLabel が無い`);
-    // Header / モバイル / Footer の nav 領域名は別ラベル(同一ラベルの二重定義をしない)
-    const set = new Set([n.mainNavigationLabel, n.mobileNavigationLabel, n.footerNavigationLabel]);
-    assert.equal(set.size, 3, `${l} の nav 領域名が重複している`);
+    assert.ok(n.languageSwitcherLabel, `${l} に languageSwitcherLabel が無い`);
+    // Header / モバイル / Footer / 言語切替 の nav 領域名は別ラベル(同一ラベルの二重定義をしない)
+    const set = new Set([
+      n.mainNavigationLabel,
+      n.mobileNavigationLabel,
+      n.footerNavigationLabel,
+      n.languageSwitcherLabel,
+    ]);
+    assert.equal(set.size, 4, `${l} の nav 領域名が重複している`);
   }
+});
+
+test("言語切替の言語名(localeScaffold.title)が各言語の自称表記で全 locale 相異", () => {
+  const names = locales.map((l) => getDictionary(l).localeScaffold.title);
+  assert.deepEqual(names, ["日本語", "English", "简体中文", "繁體中文", "한국어"]);
+  assert.equal(new Set(names).size, locales.length, "言語名が重複している");
+});
+
+test("languageSwitcherLabel の日本語が『言語』", () => {
+  assert.equal(getDictionary("ja").navigation.languageSwitcherLabel, "言語");
 });
 
 test("共通ナビ項目(common)が全 locale に home/profile/gallery/news を持つ", () => {
