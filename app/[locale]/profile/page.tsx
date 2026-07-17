@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import SectionHeading from "@/components/SectionHeading";
 import ProfileTraitGrid from "@/components/profile/ProfileTraitGrid";
 import SiteShell from "@/components/i18n/SiteShell";
-import { profile } from "@/content/profile";
 import { getProfile, type ProfilePageContent } from "@/content/profileContent";
+import { getPageMetadata } from "@/content/seoMetadata";
 import { siteConfig } from "@/config/site";
 import { isLocale, locales } from "@/lib/i18n/locales";
 
@@ -14,21 +14,19 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-// 外国語プロフィールは正式翻訳済みだが、サイト全体の多言語公開（Gallery 本文・言語別 metadata・
-// canonical・hreflang 等）が未完成のため引き続き noindex（Sprint 34 §19）。ja は既定挙動。
+// locale 別 title/description（Sprint 40・content/seoMetadata.ts）。title は absolute で root template を
+// 適用しない。ja は既存の最終出力（`プロフィール | すぴたろう公式サイト` ＋ description）を byte 一致で維持。
+// 外国語は正式翻訳済みだが多言語 SEO 公開が未完成のため引き続き noindex（Sprint 34 §19・解除は Sprint 42）。
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  if (locale === "ja") {
-    return {
-      title: "プロフィール",
-      description: `${siteConfig.characterName}のプロフィール。${profile.intro.join("")}`,
-    };
-  }
-  return { robots: { index: false, follow: false } };
+  if (!isLocale(locale)) return {};
+  const copy = getPageMetadata(locale, "profile");
+  const base: Metadata = { title: { absolute: copy.title }, description: copy.description };
+  return locale === "ja" ? base : { ...base, robots: { index: false, follow: false } };
 }
 
 /**
