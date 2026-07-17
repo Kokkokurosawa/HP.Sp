@@ -70,11 +70,8 @@ export default function ProfilePage() {
             <p className="mt-4 text-sm leading-relaxed text-night-800/70">
               気になる項目をえらぶと、すぴたろうのことをすこしずつ知れます。
             </p>
-            {/* JavaScript 無効時のみ、各カードの詳細全文を表示し、押せない「くわしく見る」を隠す。
-                JS 有効時は詳細をシートで表示するため、二重に読み上げられない。 */}
-            <noscript>
-              <style>{`.js-trait-detail{display:block !important}.js-trait-hint{display:none !important}`}</style>
-            </noscript>
+            {/* 各カードは進行的強化(ProfileTraitCard): No-JS では詳細全文を含む静的カード、
+                JS 有効時に button 化してシートで詳細を開く。noscript 用の CSS 切替は不要。 */}
             <ProfileTraitGrid traits={profile.traits} />
           </section>
 
