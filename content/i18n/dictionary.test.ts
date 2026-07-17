@@ -5,6 +5,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { getDictionary, dictionaryLocales } from "./index";
+import { getGalleryContent } from "../galleryContent";
 import { locales, type Locale } from "../../lib/i18n/locales";
 
 /** オブジェクトのドット区切りキー経路をすべて集めてソートして返す(構造比較用)。 */
@@ -180,4 +181,29 @@ test("日本語辞書の共通 UI 文言が既存の正式文言と完全一致(
   assert.equal(ja.accessibility.skipToContent, "本文へスキップ");
   assert.equal(ja.accessibility.openMenu, "メニューを開く");
   assert.equal(ja.accessibility.closeMenu, "メニューを閉じる");
+});
+
+// ---- Sprint 37: 共通 UI 翻訳の人間確認済み値 ----
+
+test("共通 UI 辞書の承認済み外国語値(Sprint 37 D-COMMON/D-GAL)", () => {
+  // D-GAL: common.gallery は Gallery ページ見出し(Sprint 35 承認)と統一し zh を確定。
+  assert.equal(getDictionary("zh-hans").common.gallery, "画廊");
+  assert.equal(getDictionary("zh-hant").common.gallery, "畫廊");
+  assert.equal(getDictionary("en").common.gallery, "Gallery");
+  assert.equal(getDictionary("ko").common.gallery, "갤러리");
+  // D-COMMON: 代表的な承認値の回帰ガード(EN/KO 含む)。
+  assert.equal(getDictionary("en").navigation.footerNavigationLabel, "Site menu");
+  assert.equal(getDictionary("en").accessibility.skipToContent, "Skip to content");
+  assert.equal(getDictionary("ko").accessibility.openMenu, "메뉴 열기");
+  assert.equal(getDictionary("zh-hant").accessibility.closeMenu, "關閉選單");
+});
+
+test("nav の gallery 項目名が Gallery ページ見出しと全 locale で一致(Sprint 37 D-GAL)", () => {
+  for (const l of locales) {
+    assert.equal(
+      getDictionary(l).common.gallery,
+      getGalleryContent(l).strings.pageTitle,
+      `${l} の nav gallery 項目名と Gallery ページ見出しが不一致`,
+    );
+  }
 });
