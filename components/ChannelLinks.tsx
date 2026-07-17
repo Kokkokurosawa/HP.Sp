@@ -1,41 +1,40 @@
 import SectionHeading from "@/components/SectionHeading";
 import { siteConfig } from "@/config/site";
+import type { TopPageContent } from "@/content/topPage";
 
 /**
  * YouTube を第一 CTA、X を第二 CTA として扱う(順序・塗り・文言で区別し、色だけに依存しない)。
- * URL が空文字の間は「準備中」表示(保守用の未設定分岐)。
- *
- * この配列がチャンネルカードの唯一のデータ元。1 項目 = 1 枚の独立したカード(安定 key = label)で、
- * 将来チャンネル(サブチャンネル・配信シリーズ等)が増えたら、実在する正式 URL をここに 1 行足すだけで
- * カードが並ぶ。表示は現在 grid だが、その際は下の <ul> を横並びトラック(overflow-x-auto)へ替えるだけで
- * カルーセルへ移行できる(架空チャンネル・空カード・ダミーは追加しない)。FOLLOW(小さな SNS アイコン)とは
- * 役割が異なり、こちらは「配信・動画を見る」ための大きめのコンテンツカード。
+ * URL が空文字の間は「準備中」表示(保守用の未設定分岐)。表示文言は locale 別(content/topPage.ts)。
+ * URL・並び順・カード構造は共通。外部リンク注記(sr-only)は共通 UI 校正 Sprint で locale 化する(Sprint 33 D-E で延期)。
  */
-const channels = [
-  {
-    label: "YouTube",
-    cta: "YouTubeで配信を見る",
-    description: "こっそりゲーム配信をしているチャンネル",
-    href: siteConfig.channels.youtube,
-    primary: true,
-  },
-  {
-    label: "X",
-    cta: "Xで活動を追う",
-    description: "公式アカウント",
-    href: siteConfig.channels.x,
-    primary: false,
-  },
-];
-
-export default function ChannelLinks() {
+export default function ChannelLinks({
+  text,
+}: {
+  text: TopPageContent["channels"];
+}) {
+  const channels = [
+    {
+      label: "YouTube",
+      cta: text.youtubeCta,
+      description: text.youtubeDesc,
+      href: siteConfig.channels.youtube,
+      primary: true,
+    },
+    {
+      label: "X",
+      cta: text.xCta,
+      description: text.xDesc,
+      href: siteConfig.channels.x,
+      primary: false,
+    },
+  ];
   return (
     <section
       aria-labelledby="channels-heading"
       className="bg-babyblue-50 py-12 sm:py-16"
     >
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <SectionHeading id="channels-heading">チャンネル</SectionHeading>
+        <SectionHeading id="channels-heading">{text.heading}</SectionHeading>
         <ul className="mt-6 grid gap-4 sm:grid-cols-2">
           {channels.map((channel) => (
             <li key={channel.label}>

@@ -8,8 +8,9 @@ import { siteConfig } from "@/config/site";
  * すぴたろうのメインビジュアル。ゆっくり上下に浮遊する。
  * prefers-reduced-motion 時は浮遊を停止する。
  * 画像パスが未設定の間は、明確なプレースホルダーを表示する。
+ * alt は locale 別のトップページ本文（content/topPage.ts）から渡す（Sprint 33）。
  */
-export default function FloatingSupitaro() {
+export default function FloatingSupitaro({ alt }: { alt: string }) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
@@ -25,7 +26,7 @@ export default function FloatingSupitaro() {
         {siteConfig.images.hero.src ? (
           <Image
             src={siteConfig.images.hero.src}
-            alt={siteConfig.images.hero.alt || siteConfig.characterName}
+            alt={alt || siteConfig.characterName}
             width={560}
             height={560}
             priority
