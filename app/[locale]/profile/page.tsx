@@ -1,16 +1,35 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import SectionHeading from "@/components/SectionHeading";
 import ProfileTraitGrid from "@/components/profile/ProfileTraitGrid";
+import LocaleScaffold from "@/components/i18n/LocaleScaffold";
 import { profile } from "@/content/profile";
 import { siteConfig } from "@/config/site";
+import { isLocale, locales } from "@/lib/i18n/locales";
 
-export const metadata: Metadata = {
-  title: "プロフィール",
-  description: `${siteConfig.characterName}のプロフィール。${profile.intro.join("")}`,
-};
+export const dynamicParams = false;
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
 
-export default function ProfilePage() {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (locale === "ja") {
+    return {
+      title: "プロフィール",
+      description: `${siteConfig.characterName}のプロフィール。${profile.intro.join("")}`,
+    };
+  }
+  return { robots: { index: false, follow: false } };
+}
+
+// 日本語プロフィール（既存 app/profile/page.tsx の内容をそのまま）。
+function JapaneseProfile() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
       <h1 className="text-2xl font-bold text-night-900 sm:text-3xl">
@@ -114,4 +133,15 @@ export default function ProfilePage() {
       </div>
     </div>
   );
+}
+
+export default async function ProfilePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  if (locale === "ja") return <JapaneseProfile />;
+  return <LocaleScaffold locale={locale} />;
 }

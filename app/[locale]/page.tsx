@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Button from "@/components/Button";
 import ChannelLinks from "@/components/ChannelLinks";
 import CharacterIntroduction from "@/components/CharacterIntroduction";
@@ -7,10 +9,28 @@ import Hero from "@/components/Hero";
 import HomeGallerySection from "@/components/home/HomeGallerySection";
 import SectionHeading from "@/components/SectionHeading";
 import SocialFollowLinks from "@/components/SocialFollowLinks";
+import LocaleScaffold from "@/components/i18n/LocaleScaffold";
 import { getPublishedGalleryItems } from "@/content/gallery";
 import { getLatestNews } from "@/content/news";
+import { isLocale, locales } from "@/lib/i18n/locales";
 
-export default function HomePage() {
+export const dynamicParams = false;
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+// 外国語ページは基盤確認用スカフォールドのため noindex（検索対象にしない）。ja は既定挙動。
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return locale === "ja" ? {} : { robots: { index: false, follow: false } };
+}
+
+// 日本語トップ（既存 app/page.tsx の内容をそのまま）。
+function JapaneseHome() {
   const latestNews = getLatestNews(3);
   const galleryItems = getPublishedGalleryItems();
 
@@ -66,4 +86,15 @@ export default function HomePage() {
       </FadeIn>
     </>
   );
+}
+
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  if (locale === "ja") return <JapaneseHome />;
+  return <LocaleScaffold locale={locale} />;
 }
