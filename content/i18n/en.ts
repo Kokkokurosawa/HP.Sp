@@ -19,6 +19,7 @@ export const en = {
   },
   navigation: {
     mainNavigationLabel: "Main navigation",
+    mobileNavigationLabel: "Mobile navigation",
     footerNavigationLabel: "Site menu",
   },
   localeScaffold: {

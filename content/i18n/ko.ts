@@ -16,6 +16,7 @@ export const ko = {
   },
   navigation: {
     mainNavigationLabel: "주 내비게이션",
+    mobileNavigationLabel: "모바일 내비게이션",
     footerNavigationLabel: "사이트 메뉴",
   },
   localeScaffold: {

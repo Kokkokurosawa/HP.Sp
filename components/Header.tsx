@@ -2,14 +2,26 @@ import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import MobileMenu from "@/components/MobileMenu";
+import type { ResolvedNavItem } from "@/components/i18n/resolveNav";
 
-export default function Header() {
+type HeaderProps = {
+  /** 解決済みナビ（URL + locale 別ラベル）。 */
+  nav: ResolvedNavItem[];
+  /** デスクトップ nav の aria-label（locale 別）。 */
+  navLabel: string;
+  /** ロゴリンクの「ホーム」相当ラベル（locale 別。キャラ名と連結してアクセシブル名にする）。 */
+  homeLabel: string;
+  /** モバイルメニュー用の文字列（Client Component へ渡す最小限）。 */
+  menu: { navLabel: string; open: string; close: string };
+};
+
+export default function Header({ nav, navLabel, homeLabel, menu }: HeaderProps) {
   return (
     <header className="sticky top-0 z-40 border-b border-babyblue-200 bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
         <Link
           href="/"
-          aria-label={`${siteConfig.characterName} ホーム`}
+          aria-label={`${siteConfig.characterName} ${homeLabel}`}
           className="inline-flex min-h-11 items-center gap-2 rounded-full text-lg font-bold text-deepblue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepblue-500"
         >
           {/* 正式ロゴ(シンボル・背景透過)。リンク名はテキストと aria-label が担うため装飾扱い(alt="") */}
@@ -24,9 +36,9 @@ export default function Header() {
           {siteConfig.characterName}
         </Link>
 
-        <nav aria-label="メインナビゲーション" className="hidden md:block">
+        <nav aria-label={navLabel} className="hidden md:block">
           <ul className="flex items-center gap-1">
-            {siteConfig.nav.map((item) => (
+            {nav.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
@@ -39,7 +51,12 @@ export default function Header() {
           </ul>
         </nav>
 
-        <MobileMenu />
+        <MobileMenu
+          nav={nav}
+          navLabel={menu.navLabel}
+          openLabel={menu.open}
+          closeLabel={menu.close}
+        />
       </div>
     </header>
   );

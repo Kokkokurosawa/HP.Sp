@@ -118,3 +118,43 @@ test("全辞書が ja と同一のキー構造(欠落・余分なキーが無い
     assert.deepEqual(keyPaths(getDictionary(l)), jaKeys, `${l} のキー構造が ja と一致しない`);
   }
 });
+
+// ---- Sprint 31: 共通 UI 定型文の辞書適用 ----
+
+test("navigation の 3 領域名(main/mobile/footer)が全 locale に存在し互いに異なる", () => {
+  for (const l of locales) {
+    const n = getDictionary(l).navigation;
+    assert.ok(n.mainNavigationLabel, `${l} に mainNavigationLabel が無い`);
+    assert.ok(n.mobileNavigationLabel, `${l} に mobileNavigationLabel が無い`);
+    assert.ok(n.footerNavigationLabel, `${l} に footerNavigationLabel が無い`);
+    // Header / モバイル / Footer の nav 領域名は別ラベル(同一ラベルの二重定義をしない)
+    const set = new Set([n.mainNavigationLabel, n.mobileNavigationLabel, n.footerNavigationLabel]);
+    assert.equal(set.size, 3, `${l} の nav 領域名が重複している`);
+  }
+});
+
+test("共通ナビ項目(common)が全 locale に home/profile/gallery/news を持つ", () => {
+  for (const l of locales) {
+    const c = getDictionary(l).common;
+    for (const key of ["home", "profile", "gallery", "news"] as const) {
+      assert.ok(c[key], `${l} の common.${key} が無い`);
+    }
+  }
+});
+
+test("日本語辞書の共通 UI 文言が既存の正式文言と完全一致(表記変更なし)", () => {
+  const ja = getDictionary("ja");
+  // ナビ項目名(Header/モバイル/Footer 共通)
+  assert.equal(ja.common.home, "ホーム");
+  assert.equal(ja.common.profile, "プロフィール");
+  assert.equal(ja.common.gallery, "ギャラリー");
+  assert.equal(ja.common.news, "お知らせ");
+  // nav 領域名(aria-label / aria-labelledby)
+  assert.equal(ja.navigation.mainNavigationLabel, "メインナビゲーション");
+  assert.equal(ja.navigation.mobileNavigationLabel, "モバイルナビゲーション");
+  assert.equal(ja.navigation.footerNavigationLabel, "サイトメニュー");
+  // アクセシビリティ定型文(skip リンク / メニュー開閉)
+  assert.equal(ja.accessibility.skipToContent, "本文へスキップ");
+  assert.equal(ja.accessibility.openMenu, "メニューを開く");
+  assert.equal(ja.accessibility.closeMenu, "メニューを閉じる");
+});

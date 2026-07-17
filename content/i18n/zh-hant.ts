@@ -17,6 +17,7 @@ export const zhHant = {
   },
   navigation: {
     mainNavigationLabel: "主導覽",
+    mobileNavigationLabel: "行動版導覽",
     footerNavigationLabel: "網站選單",
   },
   localeScaffold: {

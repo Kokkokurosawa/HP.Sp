@@ -3,6 +3,8 @@ import "./globals.css";
 import Button from "@/components/Button";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { resolveNav } from "@/components/i18n/resolveNav";
+import { getDictionary } from "@/content/i18n";
 
 /**
  * グローバル 404（app/[locale] を唯一のルートレイアウトにした R2 構成では、未マッチ path は
@@ -16,6 +18,10 @@ export const metadata: Metadata = {
 };
 
 export default function GlobalNotFound() {
+  // 404 は locale を持たないグローバルフォールバック（B1 回避のため常に日本語 chrome）。
+  // Header/Footer は共通コンポーネント化されたので、ja 辞書で解決した文字列を渡す（本文は日本語のまま）。
+  const dict = getDictionary("ja");
+  const nav = resolveNav(dict);
   return (
     <html lang="ja" className="h-full antialiased">
       <body className="flex min-h-dvh flex-col bg-white font-sans text-night-900">
@@ -23,9 +29,18 @@ export default function GlobalNotFound() {
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-deepblue-600 focus:px-4 focus:py-2 focus:font-bold focus:text-white"
         >
-          本文へスキップ
+          {dict.accessibility.skipToContent}
         </a>
-        <Header />
+        <Header
+          nav={nav}
+          navLabel={dict.navigation.mainNavigationLabel}
+          homeLabel={dict.common.home}
+          menu={{
+            navLabel: dict.navigation.mobileNavigationLabel,
+            open: dict.accessibility.openMenu,
+            close: dict.accessibility.closeMenu,
+          }}
+        />
         <main id="main" className="flex-1">
           <div className="mx-auto flex max-w-2xl flex-col items-center px-4 py-20 text-center sm:px-6 sm:py-24">
             <p className="text-sm font-bold tracking-[0.3em] text-deepblue-600">
@@ -42,7 +57,7 @@ export default function GlobalNotFound() {
             </div>
           </div>
         </main>
-        <Footer />
+        <Footer nav={nav} menuHeading={dict.navigation.footerNavigationLabel} />
       </body>
     </html>
   );

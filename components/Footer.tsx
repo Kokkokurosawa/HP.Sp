@@ -1,9 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import SocialFollowLinks from "@/components/SocialFollowLinks";
-import { siteConfig } from "@/config/site";
+import type { ResolvedNavItem } from "@/components/i18n/resolveNav";
 
-export default function Footer() {
+type FooterProps = {
+  /** 解決済みナビ（URL + locale 別ラベル）。 */
+  nav: ResolvedNavItem[];
+  /** 「サイトメニュー」見出し（footer nav の aria-labelledby 参照先。locale 別）。 */
+  menuHeading: string;
+};
+
+export default function Footer({ nav, menuHeading }: FooterProps) {
   return (
     <footer className="border-t border-babyblue-200 bg-babyblue-50">
       <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-14">
@@ -43,10 +50,10 @@ export default function Footer() {
             id="footer-menu-heading"
             className="text-center text-xs font-bold tracking-wide text-night-900"
           >
-            サイトメニュー
+            {menuHeading}
           </h2>
           <ul className="mt-3 flex flex-wrap justify-center gap-x-6 gap-y-1">
-            {siteConfig.nav.map((item) => (
+            {nav.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}

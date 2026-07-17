@@ -19,9 +19,10 @@ export const ja = {
     gallery: "ギャラリー",
     news: "お知らせ",
   },
-  /** ナビゲーション領域のラベル(スクリーンリーダー向けの領域名)。 */
+  /** ナビゲーション領域のラベル(スクリーンリーダー向けの領域名。Header/モバイル/Footer で別々)。 */
   navigation: {
     mainNavigationLabel: "メインナビゲーション",
+    mobileNavigationLabel: "モバイルナビゲーション",
     footerNavigationLabel: "サイトメニュー",
   },
   /**

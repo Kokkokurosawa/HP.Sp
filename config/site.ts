@@ -4,8 +4,14 @@
  * このファイルに集約する。
  */
 
+import type { CommonDictionary } from "@/content/i18n";
+
 export type NavItem = {
-  label: string;
+  /**
+   * 表示ラベルの辞書キー(content/i18n の common セクション)。
+   * ラベル文言そのものは locale 別辞書から解決する(config は URL と識別子だけを持つ)。
+   */
+  key: keyof CommonDictionary;
   href: string;
 };
 
@@ -83,11 +89,14 @@ export const siteConfig = {
     },
   } satisfies Record<string, SiteImage>,
 
-  /** グローバルナビゲーション(ここが唯一の定義元。Header / MobileMenu / Footer が参照する) */
+  /**
+   * グローバルナビゲーション(ここが URL と表示順の唯一の定義元。Header / MobileMenu / Footer が参照)。
+   * 表示ラベルは辞書 common セクションから解決する(ja: ホーム/プロフィール/ギャラリー/お知らせ)。
+   */
   nav: [
-    { label: "ホーム", href: "/" },
-    { label: "プロフィール", href: "/profile" },
-    { label: "ギャラリー", href: "/gallery" },
-    { label: "お知らせ", href: "/news" },
+    { key: "home", href: "/" },
+    { key: "profile", href: "/profile" },
+    { key: "gallery", href: "/gallery" },
+    { key: "news", href: "/news" },
   ] as NavItem[],
 };
