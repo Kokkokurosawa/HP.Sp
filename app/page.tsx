@@ -14,11 +14,18 @@ export default function HomePage() {
   const latestNews = getLatestNews(3);
   const galleryItems = getPublishedGalleryItems();
 
-  // 訪問者の自然な流れ: キャラを知る(すぴたろうって) → フォローする(FOLLOW)
-  // → デザインを見る(ギャラリー) → 配信を見る(チャンネル) → お知らせ。
+  // 訪問者の自然な流れ: まずデザインを見せる(ギャラリー) → キャラを知る(すぴたろうって)
+  // → フォローする(FOLLOW) → 配信を見る(チャンネル) → お知らせ。
   return (
     <>
       <Hero />
+
+      {/* デザインギャラリーのプレビュー(小さめのカード)を Hero 直下に置く。公開作品が無ければセクションごと描画しない。 */}
+      {galleryItems.length > 0 && (
+        <FadeIn>
+          <HomeGallerySection items={galleryItems} />
+        </FadeIn>
+      )}
 
       <FadeIn>
         <CharacterIntroduction />
@@ -34,13 +41,6 @@ export default function HomePage() {
           <SocialFollowLinks variant="section" headingId="home-follow-heading" />
         </section>
       </FadeIn>
-
-      {/* デザインギャラリーのプレビュー(小さめのカード)。公開作品が無ければセクションごと描画しない。 */}
-      {galleryItems.length > 0 && (
-        <FadeIn>
-          <HomeGallerySection items={galleryItems} />
-        </FadeIn>
-      )}
 
       <FadeIn>
         <ChannelLinks />
