@@ -5,7 +5,7 @@ import SectionHeading from "@/components/SectionHeading";
 import ProfileTraitGrid from "@/components/profile/ProfileTraitGrid";
 import SiteShell from "@/components/i18n/SiteShell";
 import { getProfile, type ProfilePageContent } from "@/content/profileContent";
-import { getPageMetadata } from "@/content/seoMetadata";
+import { buildLocalizedPageMetadata } from "@/lib/seo/metadata";
 import { siteConfig } from "@/config/site";
 import { isLocale, locales } from "@/lib/i18n/locales";
 
@@ -14,9 +14,8 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-// locale 別 title/description（Sprint 40・content/seoMetadata.ts）。title は absolute で root template を
-// 適用しない。ja は既存の最終出力（`プロフィール | すぴたろう公式サイト` ＋ description）を byte 一致で維持。
-// 外国語は正式翻訳済みだが多言語 SEO 公開が未完成のため引き続き noindex（Sprint 34 §19・解除は Sprint 42）。
+// locale 別 metadata（Sprint 41）。canonical/hreflang/OG/twitter を含め buildLocalizedPageMetadata で組み立てる。
+// 外国語は引き続き noindex（Sprint 34 §19・解除は Sprint 42）。ja は indexable・最終 title/description は byte 一致。
 export async function generateMetadata({
   params,
 }: {
@@ -24,9 +23,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const copy = getPageMetadata(locale, "profile");
-  const base: Metadata = { title: { absolute: copy.title }, description: copy.description };
-  return locale === "ja" ? base : { ...base, robots: { index: false, follow: false } };
+  return buildLocalizedPageMetadata(locale, "profile");
 }
 
 /**

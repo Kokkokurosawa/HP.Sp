@@ -5,6 +5,8 @@ import SiteShell from "@/components/i18n/SiteShell";
 import { getAllNews } from "@/content/news";
 import { siteConfig } from "@/config/site";
 import { localesWithNews } from "@/lib/i18n/locales";
+import { buildCanonicalUrl } from "@/lib/seo/routes";
+import { getOptionalSiteUrl } from "@/lib/seo/site-url";
 
 // News は ja のみ（Sprint 27 D-01=B）。/en/news 等は generateStaticParams に無い →
 // dynamicParams=false で 404。他ページと違い locales 全体では生成しない。
@@ -13,9 +15,14 @@ export function generateStaticParams() {
   return localesWithNews.map((locale) => ({ locale }));
 }
 
+// News は ja のみ。自己参照 canonical（/news）を SITE_URL 設定時のみ付与する（hreflang は無し・単一言語 / Sprint 41）。
+const siteUrl = getOptionalSiteUrl();
 export const metadata: Metadata = {
   title: "お知らせ",
   description: `${siteConfig.characterName}に関するお知らせの一覧です。`,
+  ...(siteUrl
+    ? { alternates: { canonical: buildCanonicalUrl(siteUrl, "ja", "news") } }
+    : {}),
 };
 
 export default async function NewsPage({

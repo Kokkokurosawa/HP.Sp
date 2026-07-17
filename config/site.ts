@@ -43,11 +43,9 @@ export const siteConfig = {
   description:
     "宇宙から来た、ふしぎないきもの「すぴたろう」の公式サイト。プロフィール・お知らせ・配信チャンネルへの入口です。",
 
-  /**
-   * 公開 URL(canonical / OG の解決に使用)。
-   * TODO: 本番ドメイン確定後に設定する。未確定のため空文字。
-   */
-  siteUrl: "",
+  // 公開 URL(canonical / OG / sitemap / robots) は Server 専用の環境変数 SITE_URL から解決する
+  // (lib/seo/site-url.ts)。正式ドメイン確定後に SITE_URL を設定する。config には URL を持たせない
+  // (config/site.ts は Client Component からも import されるため process.env を埋め込まない・Sprint 41 §33)。
 
   /**
    * 外部チャンネル URL(正式・確認済み)。ここが唯一の定義元。

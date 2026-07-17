@@ -20,10 +20,16 @@ export function isLocale(value: string): value is Locale {
 }
 
 /**
- * locale → HTML `lang` 属性値（BCP-47）。内部 locale 値とは別。
+ * HTML `lang` 属性 ＝ 公開 hreflang コード（BCP-47）。内部 locale 値（小文字）とは別物。
+ * 型を union に固定しておくことで、hreflang alternates のキー（Next の HrefLang）へ型安全に渡せる。
+ */
+export type HtmlLang = "ja" | "en" | "zh-Hans" | "zh-Hant" | "ko";
+
+/**
+ * locale → HTML `lang` 属性値（BCP-47・hreflang コードと同一）。内部 locale 値とは別。
  * ja→ja / en→en / zh-hans→zh-Hans / zh-hant→zh-Hant / ko→ko。
  */
-const htmlLangMap: Record<Locale, string> = {
+const htmlLangMap: Record<Locale, HtmlLang> = {
   ja: "ja",
   en: "en",
   "zh-hans": "zh-Hans",
@@ -31,9 +37,27 @@ const htmlLangMap: Record<Locale, string> = {
   ko: "ko",
 };
 
-/** locale の HTML `lang` 属性値を返す。 */
-export function htmlLang(locale: Locale): string {
+/** locale の HTML `lang` 属性値（＝hreflang コード）を返す。 */
+export function htmlLang(locale: Locale): HtmlLang {
   return htmlLangMap[locale];
+}
+
+/**
+ * locale → Open Graph の `og:locale`（言語_地域）。HTML lang（htmlLang）とは別物（SEO 専用）。
+ * 地域は OG 仕様上の代表値を明記する（本文で地域を特定しない場合も推測で複数地域を混在させない）。
+ * ja→ja_JP / en→en_US / zh-hans→zh_CN / zh-hant→zh_TW / ko→ko_KR。
+ */
+const ogLocaleMap: Record<Locale, string> = {
+  ja: "ja_JP",
+  en: "en_US",
+  "zh-hans": "zh_CN",
+  "zh-hant": "zh_TW",
+  ko: "ko_KR",
+};
+
+/** locale の `og:locale` 値を返す。 */
+export function ogLocale(locale: Locale): string {
+  return ogLocaleMap[locale];
 }
 
 /**

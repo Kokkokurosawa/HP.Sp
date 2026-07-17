@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "../globals.css";
 import { siteConfig } from "@/config/site";
 import { htmlLang, isLocale, locales } from "@/lib/i18n/locales";
+import { getOptionalSiteUrl } from "@/lib/seo/site-url";
 
 // R2: app/[locale] を唯一のルートレイアウトにする（Sprint 27 D-08）。
 // 対応 locale のみ静的生成し、不明 locale（/zh・/fr・/ja 以外の未知）は 404。
@@ -10,11 +11,14 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-// metadata の既存挙動を維持（言語別 title/description・canonical・hreflang は後続 Sprint）。
-// metadataBase は暫定 Stage A（正式ドメインではない）。canonical は siteUrl 確定後のみ出力。
+// metadataBase は SITE_URL（Server 専用）から解決する（Sprint 41・Stage A ハードコードを撤去）。
+// 未設定時は metadataBase を出さず、正式 URL の代わりに Stage A を fallback しない（相対 OG 画像は
+// Next 既定で解決され警告が出るが、Stage A URL を正規 URL として出力しない）。
+// canonical / hreflang / og:url は各ページ generateMetadata が SITE_URL 設定時のみ出力する（root では出さない）。
+// root の openGraph / twitter は News・404 など未上書きページ向けの日本語既定（title/description を持つページは上書き）。
 export const metadata: Metadata = {
-  metadataBase: new URL("https://supitaro-site.vercel.app"),
-  ...(siteConfig.siteUrl ? { alternates: { canonical: "/" } } : {}),
+  // SITE_URL 未設定なら null（Next は未設定扱い）。Stage A へ fallback しない。
+  metadataBase: getOptionalSiteUrl(),
   title: {
     default: siteConfig.siteName,
     template: `%s | ${siteConfig.siteName}`,

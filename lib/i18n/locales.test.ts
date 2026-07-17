@@ -7,6 +7,7 @@ import {
   defaultLocale,
   isLocale,
   htmlLang,
+  ogLocale,
   localePrefix,
   localesWithNews,
 } from "./locales";
@@ -61,4 +62,22 @@ test("localePrefix: ja は接頭辞なし・他は /locale", () => {
 
 test("News は ja のみ（/en/news 等は作らない）", () => {
   assert.deepEqual([...localesWithNews], ["ja"]);
+});
+
+// ---- Sprint 41: og:locale ----
+
+test("ogLocale: 内部 locale → og:locale（言語_地域）", () => {
+  assert.equal(ogLocale("ja"), "ja_JP");
+  assert.equal(ogLocale("en"), "en_US");
+  assert.equal(ogLocale("zh-hans"), "zh_CN");
+  assert.equal(ogLocale("zh-hant"), "zh_TW");
+  assert.equal(ogLocale("ko"), "ko_KR");
+});
+
+test("ogLocale と htmlLang を混同しない（値が異なる・全 locale 相異）", () => {
+  const ogs = locales.map((l) => ogLocale(l));
+  assert.equal(new Set(ogs).size, locales.length, "og:locale が重複");
+  for (const l of locales) {
+    assert.notEqual(ogLocale(l), htmlLang(l), `${l} で og:locale と htmlLang が同一`);
+  }
 });

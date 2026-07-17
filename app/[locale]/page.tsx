@@ -12,7 +12,7 @@ import SocialFollowLinks from "@/components/SocialFollowLinks";
 import SiteShell from "@/components/i18n/SiteShell";
 import { getDictionary } from "@/content/i18n";
 import { getGalleryContent } from "@/content/galleryContent";
-import { getPageMetadata } from "@/content/seoMetadata";
+import { buildLocalizedPageMetadata } from "@/lib/seo/metadata";
 import { getLatestNews } from "@/content/news";
 import { getTopPage, type TopPageContent } from "@/content/topPage";
 import { isLocale, locales, type Locale } from "@/lib/i18n/locales";
@@ -23,10 +23,9 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-// locale 別 title/description（Sprint 40・content/seoMetadata.ts）。title は absolute で root template を
-// 適用しない（外国語に日本語ブランドを付けない）。ja は既存の最終出力を byte 一致で維持。
-// 外国語は正式翻訳済みだが、サイト全体の多言語 SEO 公開（canonical・hreflang・sitemap 等）が未完成のため
-// 引き続き noindex（Sprint 33 §18・解除は Sprint 42）。canonical/hreflang/OG は本 Sprint 非実装（Sprint 41）。
+// locale 別 metadata（Sprint 41）: title/description（Sprint 40 承認）＋ canonical/hreflang/OG/twitter を
+// buildLocalizedPageMetadata で組み立てる。canonical/hreflang/og:url は SITE_URL 設定時のみ出力。
+// 外国語は引き続き noindex（Sprint 33 §18・解除は Sprint 42）。ja は indexable。
 export async function generateMetadata({
   params,
 }: {
@@ -34,9 +33,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const copy = getPageMetadata(locale, "top");
-  const base: Metadata = { title: { absolute: copy.title }, description: copy.description };
-  return locale === "ja" ? base : { ...base, robots: { index: false, follow: false } };
+  return buildLocalizedPageMetadata(locale, "top");
 }
 
 /**
