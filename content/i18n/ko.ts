@@ -28,5 +28,12 @@ export const ko = {
     skipToContent: "본문으로 건너뛰기",
     openMenu: "메뉴 열기",
     closeMenu: "메뉴 닫기",
+    // Sprint 38 で人間確認済み(正式)。動作句は Sprint 33 承認訳と一致。半角括弧前にスペース。
+    externalLinkNote: "(외부 링크, 새 탭에서 열립니다)",
+  },
+  social: {
+    youtube: "YouTube에서 방송 보기 (외부 링크, 새 탭에서 열립니다)",
+    x: "X에서 소식 보기 (외부 링크, 새 탭에서 열립니다)",
+    twitch: "Twitch에서 방송 보기 (외부 링크, 새 탭에서 열립니다)",
   },
 } satisfies Dictionary;

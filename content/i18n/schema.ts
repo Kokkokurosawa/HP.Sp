@@ -30,3 +30,5 @@ export type Dictionary = DeepStringShape<typeof ja>;
 export type CommonDictionary = Dictionary["common"];
 export type NavigationDictionary = Dictionary["navigation"];
 export type AccessibilityDictionary = Dictionary["accessibility"];
+/** SNS フォロー導線の accessible name セクション(SocialFollowLinks/Footer へ props で渡す / Sprint 38)。 */
+export type SocialDictionary = Dictionary["social"];

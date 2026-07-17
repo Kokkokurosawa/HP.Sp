@@ -5,12 +5,15 @@ import type { TopPageContent } from "@/content/topPage";
 /**
  * YouTube を第一 CTA、X を第二 CTA として扱う(順序・塗り・文言で区別し、色だけに依存しない)。
  * URL が空文字の間は「準備中」表示(保守用の未設定分岐)。表示文言は locale 別(content/topPage.ts)。
- * URL・並び順・カード構造は共通。外部リンク注記(sr-only)は共通 UI 校正 Sprint で locale 化する(Sprint 33 D-E で延期)。
+ * URL・並び順・カード構造は共通。外部リンク注記(sr-only)は locale 別(辞書 accessibility.externalLinkNote / Sprint 38)。
  */
 export default function ChannelLinks({
   text,
+  externalLinkNote,
 }: {
   text: TopPageContent["channels"];
+  /** 外部リンクの sr-only 注記（locale 別・辞書 accessibility.externalLinkNote / Sprint 38）。 */
+  externalLinkNote: string;
 }) {
   const channels = [
     {
@@ -58,9 +61,7 @@ export default function ChannelLinks({
                   >
                     {channel.cta}
                     <span aria-hidden="true">↗</span>
-                    <span className="sr-only">
-                      (外部リンク・新しいタブで開きます)
-                    </span>
+                    <span className="sr-only">{externalLinkNote}</span>
                   </span>
                   <span
                     className={

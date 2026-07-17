@@ -60,7 +60,11 @@ export default function GlobalNotFound() {
             </div>
           </div>
         </main>
-        <Footer nav={nav} menuHeading={dict.navigation.footerNavigationLabel} />
+        <Footer
+          nav={nav}
+          menuHeading={dict.navigation.footerNavigationLabel}
+          social={dict.social}
+        />
       </body>
     </html>
   );

@@ -30,10 +30,22 @@ export const ja = {
   language: {
     name: "日本語",
   },
-  /** アクセシビリティ用の定型文(skip リンク・メニュー開閉ラベル)。 */
+  /** アクセシビリティ用の定型文(skip リンク・メニュー開閉ラベル・外部リンク注記)。 */
   accessibility: {
     skipToContent: "本文へスキップ",
     openMenu: "メニューを開く",
     closeMenu: "メニューを閉じる",
+    // 外部リンク(target="_blank")の sr-only 注記。Button/ChannelLinks の既存ハードコードを byte 一致で集約(Sprint 38)。
+    externalLinkNote: "(外部リンク・新しいタブで開きます)",
+  },
+  /**
+   * SNS フォロー導線(SocialFollowLinks)のリンク accessible name。アイコンは aria-hidden のため
+   * この aria-label が唯一のアクセシブル名。動作句 + 外部リンク注記を一体で保持し、consumer 側で合成しない
+   * (Sprint 38 D-G)。ブランド名(YouTube/X/Twitch)は翻訳しない。ja は既存ハードコードを byte 一致で集約。
+   */
+  social: {
+    youtube: "YouTubeで配信を見る(外部リンク・新しいタブで開きます)",
+    x: "Xで活動を追う(外部リンク・新しいタブで開きます)",
+    twitch: "Twitchで配信を見る(外部リンク・新しいタブで開きます)",
   },
 } as const;

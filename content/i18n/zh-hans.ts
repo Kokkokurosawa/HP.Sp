@@ -29,5 +29,12 @@ export const zhHans = {
     skipToContent: "跳到正文",
     openMenu: "打开菜单",
     closeMenu: "关闭菜单",
+    // Sprint 38 で人間確認済み(正式)。动作句は Sprint 33 承認訳と一致。全角括弧(简体・スペースなし)。
+    externalLinkNote: "（外部链接，将在新标签页中打开）",
+  },
+  social: {
+    youtube: "在 YouTube 观看直播（外部链接，将在新标签页中打开）",
+    x: "在 X 关注动态（外部链接，将在新标签页中打开）",
+    twitch: "在 Twitch 观看直播（外部链接，将在新标签页中打开）",
   },
 } satisfies Dictionary;

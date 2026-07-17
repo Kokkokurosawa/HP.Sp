@@ -10,6 +10,7 @@ import HomeGallerySection from "@/components/home/HomeGallerySection";
 import SectionHeading from "@/components/SectionHeading";
 import SocialFollowLinks from "@/components/SocialFollowLinks";
 import SiteShell from "@/components/i18n/SiteShell";
+import { getDictionary } from "@/content/i18n";
 import { getGalleryContent } from "@/content/galleryContent";
 import { getLatestNews } from "@/content/news";
 import { getTopPage, type TopPageContent } from "@/content/topPage";
@@ -42,13 +43,18 @@ function TopPageBody({ locale, text }: { locale: Locale; text: TopPageContent })
   const profileHref = localizedPath(locale, "profile");
   const showJapaneseOnlySections = locale === "ja";
   const gallery = getGalleryContent(locale);
+  const dict = getDictionary(locale);
   const latestNews = showJapaneseOnlySections ? getLatestNews(3) : [];
 
   // 訪問者の自然な流れ: まずデザインを見せる(ギャラリー) → キャラを知る(すぴたろうって)
   // → フォローする(FOLLOW) → 配信を見る(チャンネル) → お知らせ。
   return (
     <>
-      <Hero text={text.hero} profileHref={profileHref} />
+      <Hero
+        text={text.hero}
+        profileHref={profileHref}
+        externalLinkNote={dict.accessibility.externalLinkNote}
+      />
 
       {/* デザインギャラリーのプレビュー。公開作品が無ければ描画しない（全 locale・見出し等は現在 locale）。 */}
       {gallery.items.length > 0 && (
@@ -75,12 +81,19 @@ function TopPageBody({ locale, text }: { locale: Locale; text: TopPageContent })
           aria-labelledby="home-follow-heading"
           className="mx-auto max-w-5xl px-4 pb-12 text-center sm:px-6"
         >
-          <SocialFollowLinks variant="section" headingId="home-follow-heading" />
+          <SocialFollowLinks
+            variant="section"
+            headingId="home-follow-heading"
+            social={dict.social}
+          />
         </section>
       </FadeIn>
 
       <FadeIn>
-        <ChannelLinks text={text.channels} />
+        <ChannelLinks
+          text={text.channels}
+          externalLinkNote={dict.accessibility.externalLinkNote}
+        />
       </FadeIn>
 
       {/* News は日本語のみ（D-C: 外国語トップでは非表示。外国語 News ルートは 404 契約）。 */}

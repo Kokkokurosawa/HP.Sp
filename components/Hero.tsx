@@ -7,11 +7,14 @@ import type { TopPageContent } from "@/content/topPage";
 export default function Hero({
   text,
   profileHref,
+  externalLinkNote,
 }: {
   /** locale 別トップページの Hero 本文（content/topPage.ts）。 */
   text: TopPageContent["hero"];
   /** 「プロフィールを見る」の遷移先（現在 locale の /profile）。 */
   profileHref: string;
+  /** 外部リンク(YouTube CTA)の sr-only 注記（locale 別・辞書 accessibility.externalLinkNote / Sprint 38）。 */
+  externalLinkNote: string;
 }) {
   return (
     <section
@@ -46,7 +49,12 @@ export default function Hero({
             {siteConfig.channels.youtube ? (
               <>
                 {/* YouTube が第一 CTA(配信視聴がファン化の中心導線)。赤の専用 variant で識別性を上げる */}
-                <Button href={siteConfig.channels.youtube} external variant="youtube">
+                <Button
+                  href={siteConfig.channels.youtube}
+                  external
+                  externalLabel={externalLinkNote}
+                  variant="youtube"
+                >
                   {text.watchOnYoutube}
                 </Button>
                 <Button href={profileHref} variant="secondary">

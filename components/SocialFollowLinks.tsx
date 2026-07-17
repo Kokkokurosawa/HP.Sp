@@ -1,4 +1,5 @@
 import { siteConfig } from "@/config/site";
+import type { SocialDictionary } from "@/content/i18n";
 
 /**
  * SNS アイコン(自作の簡素なモノクロ・グリフ。外部アイコンライブラリや公式ロゴ画像は使わず、
@@ -32,28 +33,14 @@ function TwitchIcon() {
 /**
  * FOLLOW に並べる SNS。表示順は YouTube → X → Twitch。
  * URL が空のチャンネルは除外する(空リンクを公開画面へ出さない)。
- * URL・アクセシブル名・アイコンの唯一の定義元。将来チャンネルが増えても config に URL を入れて
+ * URL・アイコン・辞書キーの唯一の定義元。将来チャンネルが増えても config に URL を入れて
  * ここに 1 行足すだけで、Footer とトップページの両方に同時に並ぶ(表示ごとの重複定義をしない)。
+ * accessible name(aria-label)は locale 別に辞書 social から解決する(Sprint 38・key で対応)。
  */
 const socialLinks = [
-  {
-    label: "YouTube",
-    ariaLabel: "YouTubeで配信を見る(外部リンク・新しいタブで開きます)",
-    href: siteConfig.channels.youtube,
-    Icon: YouTubeIcon,
-  },
-  {
-    label: "X",
-    ariaLabel: "Xで活動を追う(外部リンク・新しいタブで開きます)",
-    href: siteConfig.channels.x,
-    Icon: XIcon,
-  },
-  {
-    label: "Twitch",
-    ariaLabel: "Twitchで配信を見る(外部リンク・新しいタブで開きます)",
-    href: siteConfig.channels.twitch,
-    Icon: TwitchIcon,
-  },
+  { key: "youtube" as const, label: "YouTube", href: siteConfig.channels.youtube, Icon: YouTubeIcon },
+  { key: "x" as const, label: "X", href: siteConfig.channels.x, Icon: XIcon },
+  { key: "twitch" as const, label: "Twitch", href: siteConfig.channels.twitch, Icon: TwitchIcon },
 ].filter((social) => social.href);
 
 /**
@@ -83,9 +70,12 @@ const variantStyles = {
 export default function SocialFollowLinks({
   variant = "footer",
   headingId,
+  social,
 }: {
   variant?: "section" | "footer";
   headingId?: string;
+  /** SNS リンクの accessible name(locale 別・辞書 social。key youtube/x/twitch で対応 / Sprint 38)。 */
+  social: SocialDictionary;
 }) {
   const styles = variantStyles[variant];
   return (
@@ -94,13 +84,13 @@ export default function SocialFollowLinks({
         FOLLOW
       </h2>
       <ul className={styles.list}>
-        {socialLinks.map(({ label, ariaLabel, href, Icon }) => (
+        {socialLinks.map(({ key, label, href, Icon }) => (
           <li key={label}>
             <a
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={ariaLabel}
+              aria-label={social[key]}
               className={styles.link}
             >
               <Icon />

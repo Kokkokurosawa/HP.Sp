@@ -28,5 +28,12 @@ export const en = {
     skipToContent: "Skip to content",
     openMenu: "Open menu",
     closeMenu: "Close menu",
+    // Sprint 38 で人間確認済み(正式)。動作句は Sprint 33 承認訳と一致。半角括弧前にスペース(英語慣習)。
+    externalLinkNote: "(external link, opens in a new tab)",
+  },
+  social: {
+    youtube: "Watch on YouTube (external link, opens in a new tab)",
+    x: "Follow along on X (external link, opens in a new tab)",
+    twitch: "Watch on Twitch (external link, opens in a new tab)",
   },
 } satisfies Dictionary;

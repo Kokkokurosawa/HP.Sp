@@ -22,6 +22,7 @@ export type {
   CommonDictionary,
   NavigationDictionary,
   AccessibilityDictionary,
+  SocialDictionary,
 } from "./schema";
 
 /**

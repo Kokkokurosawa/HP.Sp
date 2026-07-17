@@ -53,6 +53,7 @@ export default function SiteShell({
       <Footer
         nav={nav}
         menuHeading={dict.navigation.footerNavigationLabel}
+        social={dict.social}
         languageSwitcher={
           <LanguageSwitcher
             locale={locale}

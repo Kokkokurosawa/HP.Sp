@@ -1,14 +1,23 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-type ButtonProps = {
+type ButtonBaseProps = {
   href: string;
   children: ReactNode;
   /** youtube は YouTube 導線専用の赤 variant。通常の主ボタンは primary(deepblue)のまま。 */
   variant?: "primary" | "secondary" | "youtube";
-  /** 外部リンクの場合は true(新しいタブで開き、外部リンクであることを明示する) */
-  external?: boolean;
 };
+
+/**
+ * 外部リンク(external)のときだけ sr-only 注記 externalLabel を**必須**にする判別ユニオン(Sprint 38)。
+ * 内部リンク(既存の大多数)には external/externalLabel を要求しない(利用箇所を壊さない最小設計)。
+ * externalLabel は locale 別の外部リンク注記(呼び出し側が辞書 accessibility.externalLinkNote から渡す)。
+ */
+type ButtonProps = ButtonBaseProps &
+  (
+    | { external: true; externalLabel: string }
+    | { external?: false; externalLabel?: never }
+  );
 
 const baseClass =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold transition-colors duration-200 " +
@@ -23,15 +32,11 @@ const variantClass = {
     "bg-youtube-500 text-white hover:bg-youtube-600 active:bg-youtube-700",
 } as const;
 
-export default function Button({
-  href,
-  children,
-  variant = "primary",
-  external = false,
-}: ButtonProps) {
+export default function Button(props: ButtonProps) {
+  const { href, children, variant = "primary" } = props;
   const className = `${baseClass} ${variantClass[variant]}`;
 
-  if (external) {
+  if (props.external) {
     return (
       <a
         href={href}
@@ -41,7 +46,7 @@ export default function Button({
       >
         {children}
         <span aria-hidden="true">↗</span>
-        <span className="sr-only">(外部リンク・新しいタブで開きます)</span>
+        <span className="sr-only">{props.externalLabel}</span>
       </a>
     );
   }

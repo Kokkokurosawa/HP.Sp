@@ -2,17 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 import SocialFollowLinks from "@/components/SocialFollowLinks";
 import type { ResolvedNavItem } from "@/components/i18n/resolveNav";
+import type { SocialDictionary } from "@/content/i18n";
 
 type FooterProps = {
   /** 解決済みナビ（locale 別 URL + locale 別ラベル）。 */
   nav: ResolvedNavItem[];
   /** 「サイトメニュー」見出し（footer nav の aria-labelledby 参照先。locale 別）。 */
   menuHeading: string;
+  /** FOLLOW SNS リンクの accessible name（locale 別・辞書 social / Sprint 38）。 */
+  social: SocialDictionary;
   /** 言語切替領域（Sprint 32）。404 など locale を持たない箇所では省略して非表示にできる。 */
   languageSwitcher?: React.ReactNode;
 };
 
-export default function Footer({ nav, menuHeading, languageSwitcher }: FooterProps) {
+export default function Footer({ nav, menuHeading, social, languageSwitcher }: FooterProps) {
   return (
     <footer className="border-t border-babyblue-200 bg-babyblue-50">
       <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-14">
@@ -42,7 +45,7 @@ export default function Footer({ nav, menuHeading, languageSwitcher }: FooterPro
         {/* ②③④ FOLLOW カード: SNS 導線はここのアイコンだけに集約(テキストリンクは重複させない)。
             アイコン・URL・aria-label は SocialFollowLinks に集約(トップページと共通)。見た目は footer variant で従来どおり。 */}
         <div className="mx-auto mt-8 max-w-xs rounded-3xl bg-white p-6 text-center shadow-sm">
-          <SocialFollowLinks variant="footer" />
+          <SocialFollowLinks variant="footer" social={social} />
         </div>
 
         {/* サイトメニュー: モバイルの No-JS 環境ではヘッダーのメニューが使えないため、
